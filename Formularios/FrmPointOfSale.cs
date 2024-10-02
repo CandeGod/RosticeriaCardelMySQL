@@ -1,5 +1,5 @@
 ﻿using Guna.UI2.WinForms;
-using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using RosticeriaCardelV2.Contenedores;
@@ -407,9 +407,9 @@ namespace RosticeriaCardelV2.Formularios
 
                 try
                 {
-                    using (SqlConnection connection = _databaseConnection.GetConnection())
+                    using (MySqlConnection connection = _databaseConnection.GetConnection())
                     {
-                        using (SqlTransaction transaction = connection.BeginTransaction())
+                        using (MySqlTransaction transaction = connection.BeginTransaction())
                         {
                             try
                             {

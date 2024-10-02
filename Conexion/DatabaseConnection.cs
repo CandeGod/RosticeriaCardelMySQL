@@ -1,27 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
-using System.Data.SqlClient;
-using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
+using System.Windows.Forms;
 
 namespace RosticeriaCardel
 {
     public class DatabaseConnection
     {
-       
 
-        public SqlConnection GetConnection()
+
+        public MySqlConnection GetConnection()
         {
-            SqlConnection conexion = new SqlConnection("SERVER=DELL\\CANDE;DATABASE=RosticeriaCardelV2;Integrated Security=True;TrustServerCertificate=True;");
+            
+            MySqlConnection conexion = new MySqlConnection("Server=localhost;Database=rosticeriacardel;Uid=root;Pwd=Cande213apo$;");
 
+            
             conexion.Open();
 
             return conexion;
         }
 
+        /*
         public bool ExecRespaldoBD()
 {
     bool result = true;
@@ -52,7 +51,7 @@ namespace RosticeriaCardel
     }
 
     return result;
-}
+}*/
 
     }
 }

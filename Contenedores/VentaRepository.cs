@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
 using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using System;
@@ -20,34 +20,32 @@ namespace RosticeriaCardelV2.Contenedores
         }
 
         // Crear una nueva venta y devolver el ID generado
-        public int AddVenta(Venta venta, SqlConnection connection, SqlTransaction transaction)
+        public int AddVenta(Venta venta, MySqlConnection connection, MySqlTransaction transaction)
         {
-            string query = "INSERT INTO Ventas (Fecha, Total, MontoPagado, Cambio) OUTPUT INSERTED.IdVenta VALUES (@Fecha, @Total, @MontoPagado, @Cambio)";
-            using (SqlCommand command = new SqlCommand(query, connection, transaction))
+            string query = "INSERT INTO Ventas (Fecha, Total, MontoPagado, Cambio) VALUES (@Fecha, @Total, @MontoPagado, @Cambio); SELECT LAST_INSERT_ID();";
+            using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@Fecha", venta.Fecha);
                 command.Parameters.AddWithValue("@Total", venta.Total);
                 command.Parameters.AddWithValue("@MontoPagado", (object)venta.MontoPagado ?? DBNull.Value);
                 command.Parameters.AddWithValue("@Cambio", (object)venta.Cambio ?? DBNull.Value);
 
-                return (int)command.ExecuteScalar();
+                return Convert.ToInt32(command.ExecuteScalar());
             }
         }
 
-
-
-
+        // Obtener todas las ventas
         public DataTable GetAllSales()
         {
             DataTable dt = new DataTable();
 
             try
             {
-                using (SqlConnection connection = _databaseConnection.GetConnection())
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     string query = "SELECT * FROM Ventas";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    MySqlDataAdapter da = new MySqlDataAdapter(command);
 
                     da.Fill(dt);
                 }
@@ -60,19 +58,20 @@ namespace RosticeriaCardelV2.Contenedores
             return dt;
         }
 
+        // Obtener venta por ID
         public Venta GetVentaById(int id)
         {
             Venta venta = null;
 
-            using (SqlConnection connection = _databaseConnection.GetConnection())
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
-                connection.Open();
+                //connection.Open();
                 string query = "SELECT * FROM Ventas WHERE IdVenta = @IdVenta";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@IdVenta", id);
 
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -92,13 +91,14 @@ namespace RosticeriaCardelV2.Contenedores
             return venta;
         }
 
+        // Actualizar una venta
         public void UpdateVenta(Venta venta)
         {
-            using (SqlConnection connection = _databaseConnection.GetConnection())
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
-                connection.Open();
+                //connection.Open();
                 string query = "UPDATE Ventas SET Fecha = @Fecha, Total = @Total, MontoPagado = @MontoPagado, Cambio = @Cambio WHERE IdVenta = @IdVenta";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Fecha", venta.Fecha);
                     command.Parameters.AddWithValue("@Total", venta.Total);
@@ -111,13 +111,14 @@ namespace RosticeriaCardelV2.Contenedores
             }
         }
 
+        // Eliminar una venta
         public void DeleteVenta(int id)
         {
-            using (SqlConnection connection = _databaseConnection.GetConnection())
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
-                connection.Open();
+                //connection.Open();
                 string query = "DELETE FROM Ventas WHERE IdVenta = @IdVenta";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@IdVenta", id);
 
@@ -126,19 +127,58 @@ namespace RosticeriaCardelV2.Contenedores
             }
         }
 
+        // Obtener ventas por mes
+        public DataTable GetSalesByMonth(int mes)
+        {
+            DataTable dtVentas = new DataTable();
+            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE MONTH(Fecha) = @Mes";
+
+            using (MySqlConnection conn = _databaseConnection.GetConnection())
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Mes", mes);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        dtVentas.Load(reader);
+                    }
+                }
+            }
+            return dtVentas;
+        }
+
+        // Obtener ventas por fecha específica
+        public DataTable GetSalesBySpecificDate(DateTime fecha)
+        {
+            DataTable dtVentas = new DataTable();
+            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE DATE(Fecha) = @Fecha";
+
+            using (MySqlConnection conn = _databaseConnection.GetConnection())
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Fecha", fecha.Date); // Asegúrate de comparar solo la parte de la fecha, sin la hora
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        dtVentas.Load(reader);
+                    }
+                }
+            }
+            return dtVentas;
+        }
 
         public DataTable GetSalesByMounth(int mes)
         {
             DataTable dtVentas = new DataTable();
             string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE MONTH(Fecha) = @Mes";
 
-            using (SqlConnection conn = _databaseConnection.GetConnection())
+            using (MySqlConnection conn = _databaseConnection.GetConnection())
             {
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Mes", mes);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         dtVentas.Load(reader);
                     }
@@ -146,31 +186,5 @@ namespace RosticeriaCardelV2.Contenedores
             }
             return dtVentas;
         }
-
-        public DataTable GetSalesBySpecificDate(DateTime fecha)
-        {
-            DataTable dtVentas = new DataTable();
-            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE CAST(Fecha AS DATE) = @Fecha";
-
-            using (SqlConnection conn = _databaseConnection.GetConnection())
-            {
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Fecha", fecha.Date); // Asegúrate de comparar solo la parte de la fecha, sin la hora
-                    
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        dtVentas.Load(reader);
-                    }
-                }
-            }
-            return dtVentas;
-        }
-
-
-
-
     }
-
 }
-

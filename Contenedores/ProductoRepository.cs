@@ -1,10 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
 using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,17 +22,18 @@ namespace RosticeriaCardelV2.Contenedores
         // Crear un nuevo producto
         public void AddProducto(Producto producto)
         {
-            using (SqlConnection connection = _databaseConnection.GetConnection())
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
                 try
                 {
                     string query = "INSERT INTO Productos (Nombre, Precio, Stock) VALUES (@Nombre, @Precio, @Stock)";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
 
+                        //connection.Open();
                         command.ExecuteNonQuery();
                     }
                 }
@@ -47,6 +47,7 @@ namespace RosticeriaCardelV2.Contenedores
                 }
             }
         }
+
         // Leer todos los productos
         public List<Producto> GetAllProductos()
         {
@@ -54,42 +55,40 @@ namespace RosticeriaCardelV2.Contenedores
 
             try
             {
-                using (SqlConnection connection = _databaseConnection.GetConnection())
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     string query = "SELECT * FROM Productos";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    SqlDataAdapter da = new SqlDataAdapter(command);
-
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    foreach (DataRow row in dt.Rows)
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        Producto producto = new Producto
+                        //connection.Open();
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
-                            IdProducto = row["IdProducto"] != DBNull.Value ? Convert.ToInt32(row["IdProducto"]) : 0,
-                            Nombre = row["Nombre"] != DBNull.Value ? row["Nombre"].ToString() : string.Empty,
-                            Precio = row["Precio"] != DBNull.Value ? Convert.ToDecimal(row["Precio"]) : 0m,
-                            Stock = row["Stock"] != DBNull.Value ? Convert.ToDecimal(row["Stock"]) : 0
-                        };
-                        productos.Add(producto);
+                            while (reader.Read())
+                            {
+                                Producto producto = new Producto
+                                {
+                                    IdProducto = reader["IdProducto"] != DBNull.Value ? Convert.ToInt32(reader["IdProducto"]) : 0,
+                                    Nombre = reader["Nombre"] != DBNull.Value ? reader["Nombre"].ToString() : string.Empty,
+                                    Precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0m,
+                                    Stock = reader["Stock"] != DBNull.Value ? Convert.ToDecimal(reader["Stock"]) : 0
+                                };
+                                productos.Add(producto);
+                            }
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar productos: {ex.Message}");
+                throw new Exception($"Error al cargar productos: {ex.Message}");
             }
 
             return productos;
         }
 
-
-
         // Leer un producto por ID
         public Producto GetProductoById(int idProducto)
         {
-            // Verifica que el idProducto sea válido
             if (idProducto <= 0)
             {
                 throw new ArgumentException("El ID del producto debe ser mayor que cero.", nameof(idProducto));
@@ -97,73 +96,63 @@ namespace RosticeriaCardelV2.Contenedores
 
             try
             {
-                using (SqlConnection connection = _databaseConnection.GetConnection())
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     string query = "SELECT Nombre, Precio FROM Productos WHERE IdProducto = @IdProducto";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdProducto", idProducto);
 
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        //connection.Open();
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                string nombreProducto = reader["Nombre"].ToString();
-                                decimal precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0.0m;
-
-                                // Crea y retorna una instancia de Producto con los datos obtenidos
                                 return new Producto
                                 {
                                     IdProducto = idProducto,
-                                    Nombre = nombreProducto,
-                                    Precio = precio
+                                    Nombre = reader["Nombre"].ToString(),
+                                    Precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0.0m
                                 };
                             }
                         }
                     }
                 }
             }
-            catch (SqlException ex)
-            {
-                // Manejo de excepción SQL (por ejemplo, errores de conexión o consulta)
-                // Puedes registrar el error o lanzar una excepción personalizada
-                throw new Exception("Error al recuperar el producto desde la base de datos.", ex);
-            }
             catch (Exception ex)
             {
-                // Manejo de otras excepciones
                 throw new Exception("Se produjo un error al recuperar el producto.", ex);
             }
 
-            // Si el producto no existe, se retorna null
             return null;
         }
 
         // Actualizar un producto
         public void UpdateProducto(Producto producto)
         {
-            using (SqlConnection connection = _databaseConnection.GetConnection())
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
                 try
                 {
                     string query = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock WHERE IdProducto = @IdProducto";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
                         command.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
 
+                        //connection.Open();
                         command.ExecuteNonQuery();
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error al agregar el producto: " + ex.Message);
+                    throw new Exception("Error al actualizar el producto: " + ex.Message);
                 }
                 finally
                 {
-                    connection.Close(); // Asegurarse de cerrar la conexión
+                    connection.Close();
                 }
             }
         }
@@ -171,14 +160,16 @@ namespace RosticeriaCardelV2.Contenedores
         // Eliminar un producto
         public void DeleteProducto(int id)
         {
-            using (SqlConnection connection = _databaseConnection.GetConnection())
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
                 try
                 {
                     string query = "DELETE FROM Productos WHERE IdProducto = @IdProducto";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdProducto", id);
+
+                        //connection.Open();
                         command.ExecuteNonQuery();
                     }
                 }
@@ -188,15 +179,15 @@ namespace RosticeriaCardelV2.Contenedores
                 }
                 finally
                 {
-                    connection.Close(); // Asegurarse de cerrar la conexión
+                    connection.Close();
                 }
             }
         }
 
-        public void DecreaseStock(int idProducto, decimal cantidad, SqlConnection connection, SqlTransaction transaction)
+        public void DecreaseStock(int idProducto, decimal cantidad, MySqlConnection connection, MySqlTransaction transaction)
         {
             string query = "UPDATE Productos SET Stock = Stock - @Cantidad WHERE IdProducto = @IdProducto";
-            using (SqlCommand command = new SqlCommand(query, connection, transaction))
+            using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@IdProducto", idProducto);
                 command.Parameters.AddWithValue("@Cantidad", cantidad);
@@ -205,18 +196,16 @@ namespace RosticeriaCardelV2.Contenedores
             }
         }
 
-        public bool HayStockSuficiente(int idProducto, decimal cantidadSolicitada, SqlConnection connection, SqlTransaction transaction)
+        public bool HayStockSuficiente(int idProducto, decimal cantidadSolicitada, MySqlConnection connection, MySqlTransaction transaction)
         {
             string query = "SELECT Stock FROM Productos WHERE IdProducto = @IdProducto";
-            using (SqlCommand command = new SqlCommand(query, connection, transaction))
+            using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@IdProducto", idProducto);
-                decimal stockDisponible = (decimal)command.ExecuteScalar();
+                decimal stockDisponible = Convert.ToDecimal(command.ExecuteScalar());
 
                 return stockDisponible >= cantidadSolicitada;
             }
         }
-
-
     }
 }

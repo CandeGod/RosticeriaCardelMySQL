@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿
 using RosticeriaCardel;
 using RosticeriaCardelV2.Contenedores;
 using System;
@@ -36,7 +36,7 @@ namespace RosticeriaCardelV2.Formularios
             cbDates.SelectedItem = "Hoy";
 
             // Llama al manejador del evento SelectedIndexChanged para cargar las ventas del día
-            cbDates_SelectedIndexChanged(sender, e);
+            //cbDates_SelectedIndexChanged(sender, e);
         }
 
         private void DetailSale(int idVenta)
@@ -97,6 +97,7 @@ namespace RosticeriaCardelV2.Formularios
 
         private void cbMonths_SelectedIndexChanged(object sender, EventArgs e)
         {
+            cbDates.SelectedIndex = -1;
             if (cbMonths.SelectedItem != null)
             {
                 int mesSeleccionado = cbMonths.SelectedIndex + 1; // Suponiendo que los meses están indexados del 1 al 12
@@ -132,6 +133,8 @@ namespace RosticeriaCardelV2.Formularios
                 else
                 {
                     rtxtSalesResume.Text = "No se encontraron ventas para el mes seleccionado.";
+                    rtxtSalesDetails.Text = string.Empty;
+                    dgvSales.DataSource = null;
                 }
 
                 UpdateSelectedDate(cbMonths.SelectedItem.ToString());
@@ -141,6 +144,7 @@ namespace RosticeriaCardelV2.Formularios
 
         private void cbDates_SelectedIndexChanged(object sender, EventArgs e)
         {
+            cbMonths.SelectedIndex = -1;
             if (cbDates.SelectedItem != null)
             {
                 string filtroSeleccionado = cbDates.SelectedItem.ToString();
@@ -177,6 +181,8 @@ namespace RosticeriaCardelV2.Formularios
                 else
                 {
                     rtxtSalesResume.Text = "No se encontraron ventas para el filtro seleccionado.";
+                    rtxtSalesDetails.Text = "";
+                    dgvSales.DataSource = null;
                 }
                 UpdateSelectedDate(filtroSeleccionado);
             }
@@ -184,6 +190,9 @@ namespace RosticeriaCardelV2.Formularios
 
         private void dtpDate_ValueChanged(object sender, EventArgs e)
         {
+            cbDates.SelectedIndex = -1;
+            cbMonths.SelectedIndex = -1;
+
             DateTime fechaSeleccionada = dtpDate.Value.Date;
 
             DataTable dt = _detalleVentaRepository.GetSalesBySpecificDate(fechaSeleccionada);
@@ -219,6 +228,8 @@ namespace RosticeriaCardelV2.Formularios
             else
             {
                 rtxtSalesResume.Text = "No se encontraron ventas para la fecha seleccionada.";
+                dgvSales.DataSource = null;
+                rtxtSalesDetails.Text = string.Empty;
             }
 
             UpdateSelectedDate(fechaSeleccionada.ToString("dd/MM/yyyy"));
@@ -269,7 +280,7 @@ namespace RosticeriaCardelV2.Formularios
             lblSelectedDate.Text = $"Fecha seleccionada: {texto}";
         }
 
-        private void btnBackup_Click(object sender, EventArgs e)
+        /*private void btnBackup_Click(object sender, EventArgs e)
         {
             bool result = _databaseConnection.ExecRespaldoBD();
 
@@ -281,7 +292,7 @@ namespace RosticeriaCardelV2.Formularios
             {
                 MessageBox.Show("Error al realizar la copia de seguridad.");
             }
-        }
+        }*/
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {

@@ -188,7 +188,7 @@
             btnBackup.TabIndex = 66;
             btnBackup.Text = "Subir respaldo";
             btnBackup.TextOffset = new Point(-15, 0);
-            btnBackup.Click += btnBackup_Click;
+            //btnBackup.Click += btnBackup_Click;
             // 
             // guna2CirclePictureBox1
             // 
