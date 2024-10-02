@@ -35,6 +35,8 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             guna2HtmlLabel3 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2HtmlLabel2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -46,6 +48,8 @@
             label2 = new Label();
             label1 = new Label();
             pictureBox1 = new PictureBox();
+            guna2HtmlLabel4 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            btnCorteCaja = new Guna.UI2.WinForms.Guna2Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -214,11 +218,48 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
+            // guna2HtmlLabel4
+            // 
+            guna2HtmlLabel4.BackColor = Color.Transparent;
+            guna2HtmlLabel4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            guna2HtmlLabel4.Location = new Point(1322, 870);
+            guna2HtmlLabel4.Name = "guna2HtmlLabel4";
+            guna2HtmlLabel4.Size = new Size(127, 30);
+            guna2HtmlLabel4.TabIndex = 18;
+            guna2HtmlLabel4.Text = "Corte de caja";
+            // 
+            // btnCorteCaja
+            // 
+            btnCorteCaja.BorderRadius = 40;
+            btnCorteCaja.BorderThickness = 2;
+            btnCorteCaja.CustomizableEdges = customizableEdges7;
+            btnCorteCaja.DisabledState.BorderColor = Color.DarkGray;
+            btnCorteCaja.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnCorteCaja.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnCorteCaja.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCorteCaja.FillColor = Color.FromArgb(255, 92, 0);
+            btnCorteCaja.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCorteCaja.ForeColor = Color.White;
+            btnCorteCaja.Image = (Image)resources.GetObject("btnCorteCaja.Image");
+            btnCorteCaja.ImageAlign = HorizontalAlignment.Right;
+            btnCorteCaja.ImageOffset = new Point(-10, 0);
+            btnCorteCaja.ImageSize = new Size(64, 64);
+            btnCorteCaja.Location = new Point(1247, 906);
+            btnCorteCaja.Name = "btnCorteCaja";
+            btnCorteCaja.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnCorteCaja.Size = new Size(368, 95);
+            btnCorteCaja.TabIndex = 17;
+            btnCorteCaja.Text = "Cortes de caja";
+            btnCorteCaja.TextAlign = HorizontalAlignment.Left;
+            btnCorteCaja.Click += btnCorteCaja_Click;
+            // 
             // FrmStart
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(guna2HtmlLabel4);
+            Controls.Add(btnCorteCaja);
             Controls.Add(guna2HtmlLabel3);
             Controls.Add(guna2HtmlLabel2);
             Controls.Add(guna2HtmlLabel1);
@@ -250,5 +291,7 @@
         private Label label2;
         private Label label1;
         private PictureBox pictureBox1;
+        private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel4;
+        private Guna.UI2.WinForms.Guna2Button btnCorteCaja;
     }
 }

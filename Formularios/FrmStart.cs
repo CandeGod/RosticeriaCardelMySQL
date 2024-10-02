@@ -40,5 +40,13 @@ namespace RosticeriaCardelV2.Formularios
             frm.ShowDialog();
             this.Show();
         }
+
+        private void btnCorteCaja_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FrmCashCut frm = new FrmCashCut();
+            frm.ShowDialog();
+            this.Show();
+        }
     }
 }
