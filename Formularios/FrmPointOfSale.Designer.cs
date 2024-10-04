@@ -63,15 +63,12 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges33 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges34 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges35 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges36 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges37 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPointOfSale));
             guna2vSeparator3 = new Guna.UI2.WinForms.Guna2VSeparator();
             guna2vSeparator2 = new Guna.UI2.WinForms.Guna2VSeparator();
             guna2vSeparator1 = new Guna.UI2.WinForms.Guna2VSeparator();
             btnCancelSale = new Guna.UI2.WinForms.Guna2Button();
             btnDeleteArticle = new Guna.UI2.WinForms.Guna2Button();
-            btnOpenComplements = new Guna.UI2.WinForms.Guna2Button();
             panel2 = new Panel();
             label1 = new Label();
             lblTotal = new Label();
@@ -102,6 +99,7 @@
             btnHalfChiltepin = new Guna.UI2.WinForms.Guna2Button();
             btnOneChiltepin = new Guna.UI2.WinForms.Guna2Button();
             btnOneNatural = new Guna.UI2.WinForms.Guna2Button();
+            flpComplements = new FlowLayoutPanel();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)guna2PictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)guna2PictureBox2).BeginInit();
@@ -172,7 +170,7 @@
             btnDeleteArticle.DisabledState.CustomBorderColor = Color.DarkGray;
             btnDeleteArticle.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnDeleteArticle.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnDeleteArticle.FillColor = Color.Tomato;
+            btnDeleteArticle.FillColor = Color.FromArgb(219, 197, 0);
             btnDeleteArticle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDeleteArticle.ForeColor = Color.White;
             btnDeleteArticle.Image = Properties.Resources.advertencia;
@@ -186,31 +184,6 @@
             btnDeleteArticle.TabIndex = 76;
             btnDeleteArticle.Text = "Eliminar articulo";
             btnDeleteArticle.Click += btnDeleteArticle_Click;
-            // 
-            // btnOpenComplements
-            // 
-            btnOpenComplements.BorderRadius = 25;
-            btnOpenComplements.BorderThickness = 2;
-            btnOpenComplements.CustomizableEdges = customizableEdges5;
-            btnOpenComplements.DisabledState.BorderColor = Color.DarkGray;
-            btnOpenComplements.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnOpenComplements.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnOpenComplements.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnOpenComplements.FillColor = Color.FromArgb(219, 197, 0);
-            btnOpenComplements.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnOpenComplements.ForeColor = Color.White;
-            btnOpenComplements.Image = Properties.Resources.anadir1;
-            btnOpenComplements.ImageAlign = HorizontalAlignment.Right;
-            btnOpenComplements.ImageOffset = new Point(20, 0);
-            btnOpenComplements.ImageSize = new Size(30, 30);
-            btnOpenComplements.Location = new Point(1493, 744);
-            btnOpenComplements.Name = "btnOpenComplements";
-            btnOpenComplements.ShadowDecoration.CustomizableEdges = customizableEdges6;
-            btnOpenComplements.Size = new Size(360, 56);
-            btnOpenComplements.TabIndex = 75;
-            btnOpenComplements.Text = "Complementos";
-            btnOpenComplements.TextOffset = new Point(0, -2);
-            btnOpenComplements.Click += btnOpenComplements_Click;
             // 
             // panel2
             // 
@@ -249,7 +222,7 @@
             // 
             btnPay.BorderRadius = 20;
             btnPay.BorderThickness = 2;
-            btnPay.CustomizableEdges = customizableEdges7;
+            btnPay.CustomizableEdges = customizableEdges5;
             btnPay.DisabledState.BorderColor = Color.DarkGray;
             btnPay.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPay.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -262,7 +235,7 @@
             btnPay.ImageSize = new Size(50, 50);
             btnPay.Location = new Point(764, 918);
             btnPay.Name = "btnPay";
-            btnPay.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnPay.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnPay.Size = new Size(333, 88);
             btnPay.TabIndex = 73;
             btnPay.Text = "Pagar";
@@ -273,7 +246,7 @@
             // 
             btnAddToCart.BorderColor = SystemColors.InfoText;
             btnAddToCart.BorderThickness = 3;
-            btnAddToCart.CustomizableEdges = customizableEdges9;
+            btnAddToCart.CustomizableEdges = customizableEdges7;
             btnAddToCart.DisabledState.BorderColor = Color.DarkGray;
             btnAddToCart.DisabledState.CustomBorderColor = Color.DarkGray;
             btnAddToCart.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -281,10 +254,10 @@
             btnAddToCart.FillColor = Color.Blue;
             btnAddToCart.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddToCart.ForeColor = Color.White;
-            btnAddToCart.Location = new Point(764, 159);
+            btnAddToCart.Location = new Point(1346, 159);
             btnAddToCart.Name = "btnAddToCart";
-            btnAddToCart.ShadowDecoration.CustomizableEdges = customizableEdges10;
-            btnAddToCart.Size = new Size(1126, 85);
+            btnAddToCart.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnAddToCart.Size = new Size(544, 85);
             btnAddToCart.TabIndex = 72;
             btnAddToCart.Text = "Agregar al carrito";
             btnAddToCart.Click += btnAddToCart_Click;
@@ -313,12 +286,12 @@
             // 
             // guna2PictureBox3
             // 
-            guna2PictureBox3.CustomizableEdges = customizableEdges11;
+            guna2PictureBox3.CustomizableEdges = customizableEdges9;
             guna2PictureBox3.Image = Properties.Resources.Pollo;
             guna2PictureBox3.ImageRotate = 0F;
             guna2PictureBox3.Location = new Point(71, 767);
             guna2PictureBox3.Name = "guna2PictureBox3";
-            guna2PictureBox3.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            guna2PictureBox3.ShadowDecoration.CustomizableEdges = customizableEdges10;
             guna2PictureBox3.Size = new Size(241, 191);
             guna2PictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             guna2PictureBox3.TabIndex = 69;
@@ -326,12 +299,12 @@
             // 
             // guna2PictureBox2
             // 
-            guna2PictureBox2.CustomizableEdges = customizableEdges13;
+            guna2PictureBox2.CustomizableEdges = customizableEdges11;
             guna2PictureBox2.Image = Properties.Resources.Pollo;
             guna2PictureBox2.ImageRotate = 0F;
             guna2PictureBox2.Location = new Point(71, 481);
             guna2PictureBox2.Name = "guna2PictureBox2";
-            guna2PictureBox2.ShadowDecoration.CustomizableEdges = customizableEdges14;
+            guna2PictureBox2.ShadowDecoration.CustomizableEdges = customizableEdges12;
             guna2PictureBox2.Size = new Size(241, 191);
             guna2PictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             guna2PictureBox2.TabIndex = 68;
@@ -357,7 +330,7 @@
             guna2CirclePictureBox1.ImageRotate = 0F;
             guna2CirclePictureBox1.Location = new Point(1768, 5);
             guna2CirclePictureBox1.Name = "guna2CirclePictureBox1";
-            guna2CirclePictureBox1.ShadowDecoration.CustomizableEdges = customizableEdges15;
+            guna2CirclePictureBox1.ShadowDecoration.CustomizableEdges = customizableEdges13;
             guna2CirclePictureBox1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             guna2CirclePictureBox1.Size = new Size(105, 105);
             guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -369,7 +342,7 @@
             btnBack.BackgroundImageLayout = ImageLayout.Stretch;
             btnBack.BorderRadius = 20;
             btnBack.BorderStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-            btnBack.CustomizableEdges = customizableEdges16;
+            btnBack.CustomizableEdges = customizableEdges14;
             btnBack.DisabledState.BorderColor = Color.DarkGray;
             btnBack.DisabledState.CustomBorderColor = Color.DarkGray;
             btnBack.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -381,7 +354,7 @@
             btnBack.ImageSize = new Size(100, 55);
             btnBack.Location = new Point(-1, -1);
             btnBack.Name = "btnBack";
-            btnBack.ShadowDecoration.CustomizableEdges = customizableEdges17;
+            btnBack.ShadowDecoration.CustomizableEdges = customizableEdges15;
             btnBack.Size = new Size(119, 72);
             btnBack.TabIndex = 32;
             btnBack.Click += btnBack_Click;
@@ -421,12 +394,12 @@
             // 
             // guna2PictureBox1
             // 
-            guna2PictureBox1.CustomizableEdges = customizableEdges18;
+            guna2PictureBox1.CustomizableEdges = customizableEdges16;
             guna2PictureBox1.Image = Properties.Resources.Pollo;
             guna2PictureBox1.ImageRotate = 0F;
             guna2PictureBox1.Location = new Point(71, 188);
             guna2PictureBox1.Name = "guna2PictureBox1";
-            guna2PictureBox1.ShadowDecoration.CustomizableEdges = customizableEdges19;
+            guna2PictureBox1.ShadowDecoration.CustomizableEdges = customizableEdges17;
             guna2PictureBox1.Size = new Size(241, 191);
             guna2PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             guna2PictureBox1.TabIndex = 66;
@@ -482,19 +455,19 @@
             dgvCart.AllowUserToDeleteRows = false;
             dgvCart.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvCart.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCart.Location = new Point(764, 257);
+            dgvCart.Location = new Point(1346, 257);
             dgvCart.Margin = new Padding(3, 4, 3, 4);
             dgvCart.Name = "dgvCart";
             dgvCart.ReadOnly = true;
             dgvCart.RowHeadersWidth = 51;
-            dgvCart.Size = new Size(1126, 465);
+            dgvCart.Size = new Size(544, 465);
             dgvCart.TabIndex = 49;
             // 
             // btnHalfNatural
             // 
             btnHalfNatural.BorderRadius = 5;
             btnHalfNatural.BorderThickness = 1;
-            btnHalfNatural.CustomizableEdges = customizableEdges20;
+            btnHalfNatural.CustomizableEdges = customizableEdges18;
             btnHalfNatural.DisabledState.BorderColor = Color.DarkGray;
             btnHalfNatural.DisabledState.CustomBorderColor = Color.DarkGray;
             btnHalfNatural.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -504,7 +477,7 @@
             btnHalfNatural.ForeColor = Color.Black;
             btnHalfNatural.Location = new Point(389, 159);
             btnHalfNatural.Name = "btnHalfNatural";
-            btnHalfNatural.ShadowDecoration.CustomizableEdges = customizableEdges21;
+            btnHalfNatural.ShadowDecoration.CustomizableEdges = customizableEdges19;
             btnHalfNatural.Size = new Size(100, 90);
             btnHalfNatural.TabIndex = 82;
             btnHalfNatural.Text = "1/2";
@@ -515,7 +488,7 @@
             // 
             btnTwoNatural.BorderRadius = 5;
             btnTwoNatural.BorderThickness = 1;
-            btnTwoNatural.CustomizableEdges = customizableEdges22;
+            btnTwoNatural.CustomizableEdges = customizableEdges20;
             btnTwoNatural.DisabledState.BorderColor = Color.DarkGray;
             btnTwoNatural.DisabledState.CustomBorderColor = Color.DarkGray;
             btnTwoNatural.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -525,7 +498,7 @@
             btnTwoNatural.ForeColor = Color.Black;
             btnTwoNatural.Location = new Point(389, 257);
             btnTwoNatural.Name = "btnTwoNatural";
-            btnTwoNatural.ShadowDecoration.CustomizableEdges = customizableEdges23;
+            btnTwoNatural.ShadowDecoration.CustomizableEdges = customizableEdges21;
             btnTwoNatural.Size = new Size(100, 90);
             btnTwoNatural.TabIndex = 83;
             btnTwoNatural.Text = "2";
@@ -536,7 +509,7 @@
             // 
             btnTwoAdobado.BorderRadius = 5;
             btnTwoAdobado.BorderThickness = 1;
-            btnTwoAdobado.CustomizableEdges = customizableEdges24;
+            btnTwoAdobado.CustomizableEdges = customizableEdges22;
             btnTwoAdobado.DisabledState.BorderColor = Color.DarkGray;
             btnTwoAdobado.DisabledState.CustomBorderColor = Color.DarkGray;
             btnTwoAdobado.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -546,7 +519,7 @@
             btnTwoAdobado.ForeColor = Color.Black;
             btnTwoAdobado.Location = new Point(389, 544);
             btnTwoAdobado.Name = "btnTwoAdobado";
-            btnTwoAdobado.ShadowDecoration.CustomizableEdges = customizableEdges25;
+            btnTwoAdobado.ShadowDecoration.CustomizableEdges = customizableEdges23;
             btnTwoAdobado.Size = new Size(100, 90);
             btnTwoAdobado.TabIndex = 86;
             btnTwoAdobado.Text = "2";
@@ -557,7 +530,7 @@
             // 
             btnHalfAdobado.BorderRadius = 5;
             btnHalfAdobado.BorderThickness = 1;
-            btnHalfAdobado.CustomizableEdges = customizableEdges26;
+            btnHalfAdobado.CustomizableEdges = customizableEdges24;
             btnHalfAdobado.DisabledState.BorderColor = Color.DarkGray;
             btnHalfAdobado.DisabledState.CustomBorderColor = Color.DarkGray;
             btnHalfAdobado.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -567,7 +540,7 @@
             btnHalfAdobado.ForeColor = Color.Black;
             btnHalfAdobado.Location = new Point(389, 446);
             btnHalfAdobado.Name = "btnHalfAdobado";
-            btnHalfAdobado.ShadowDecoration.CustomizableEdges = customizableEdges27;
+            btnHalfAdobado.ShadowDecoration.CustomizableEdges = customizableEdges25;
             btnHalfAdobado.Size = new Size(100, 90);
             btnHalfAdobado.TabIndex = 85;
             btnHalfAdobado.Text = "1/2";
@@ -578,7 +551,7 @@
             // 
             btnOneAdobado.BorderRadius = 5;
             btnOneAdobado.BorderThickness = 1;
-            btnOneAdobado.CustomizableEdges = customizableEdges28;
+            btnOneAdobado.CustomizableEdges = customizableEdges26;
             btnOneAdobado.DisabledState.BorderColor = Color.DarkGray;
             btnOneAdobado.DisabledState.CustomBorderColor = Color.DarkGray;
             btnOneAdobado.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -588,7 +561,7 @@
             btnOneAdobado.ForeColor = Color.Black;
             btnOneAdobado.Location = new Point(501, 446);
             btnOneAdobado.Name = "btnOneAdobado";
-            btnOneAdobado.ShadowDecoration.CustomizableEdges = customizableEdges29;
+            btnOneAdobado.ShadowDecoration.CustomizableEdges = customizableEdges27;
             btnOneAdobado.Size = new Size(100, 90);
             btnOneAdobado.TabIndex = 84;
             btnOneAdobado.Text = "1";
@@ -599,7 +572,7 @@
             // 
             btnTwoChiltepin.BorderRadius = 5;
             btnTwoChiltepin.BorderThickness = 1;
-            btnTwoChiltepin.CustomizableEdges = customizableEdges30;
+            btnTwoChiltepin.CustomizableEdges = customizableEdges28;
             btnTwoChiltepin.DisabledState.BorderColor = Color.DarkGray;
             btnTwoChiltepin.DisabledState.CustomBorderColor = Color.DarkGray;
             btnTwoChiltepin.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -609,7 +582,7 @@
             btnTwoChiltepin.ForeColor = Color.Black;
             btnTwoChiltepin.Location = new Point(389, 840);
             btnTwoChiltepin.Name = "btnTwoChiltepin";
-            btnTwoChiltepin.ShadowDecoration.CustomizableEdges = customizableEdges31;
+            btnTwoChiltepin.ShadowDecoration.CustomizableEdges = customizableEdges29;
             btnTwoChiltepin.Size = new Size(100, 90);
             btnTwoChiltepin.TabIndex = 89;
             btnTwoChiltepin.Text = "2";
@@ -620,7 +593,7 @@
             // 
             btnHalfChiltepin.BorderRadius = 5;
             btnHalfChiltepin.BorderThickness = 1;
-            btnHalfChiltepin.CustomizableEdges = customizableEdges32;
+            btnHalfChiltepin.CustomizableEdges = customizableEdges30;
             btnHalfChiltepin.DisabledState.BorderColor = Color.DarkGray;
             btnHalfChiltepin.DisabledState.CustomBorderColor = Color.DarkGray;
             btnHalfChiltepin.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -630,7 +603,7 @@
             btnHalfChiltepin.ForeColor = Color.Black;
             btnHalfChiltepin.Location = new Point(389, 742);
             btnHalfChiltepin.Name = "btnHalfChiltepin";
-            btnHalfChiltepin.ShadowDecoration.CustomizableEdges = customizableEdges33;
+            btnHalfChiltepin.ShadowDecoration.CustomizableEdges = customizableEdges31;
             btnHalfChiltepin.Size = new Size(100, 90);
             btnHalfChiltepin.TabIndex = 88;
             btnHalfChiltepin.Text = "1/2";
@@ -641,7 +614,7 @@
             // 
             btnOneChiltepin.BorderRadius = 5;
             btnOneChiltepin.BorderThickness = 1;
-            btnOneChiltepin.CustomizableEdges = customizableEdges34;
+            btnOneChiltepin.CustomizableEdges = customizableEdges32;
             btnOneChiltepin.DisabledState.BorderColor = Color.DarkGray;
             btnOneChiltepin.DisabledState.CustomBorderColor = Color.DarkGray;
             btnOneChiltepin.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -651,7 +624,7 @@
             btnOneChiltepin.ForeColor = Color.Black;
             btnOneChiltepin.Location = new Point(501, 742);
             btnOneChiltepin.Name = "btnOneChiltepin";
-            btnOneChiltepin.ShadowDecoration.CustomizableEdges = customizableEdges35;
+            btnOneChiltepin.ShadowDecoration.CustomizableEdges = customizableEdges33;
             btnOneChiltepin.Size = new Size(100, 90);
             btnOneChiltepin.TabIndex = 87;
             btnOneChiltepin.Text = "1";
@@ -662,7 +635,7 @@
             // 
             btnOneNatural.BorderRadius = 5;
             btnOneNatural.BorderThickness = 1;
-            btnOneNatural.CustomizableEdges = customizableEdges36;
+            btnOneNatural.CustomizableEdges = customizableEdges34;
             btnOneNatural.DisabledState.BorderColor = Color.DarkGray;
             btnOneNatural.DisabledState.CustomBorderColor = Color.DarkGray;
             btnOneNatural.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -672,18 +645,26 @@
             btnOneNatural.ForeColor = Color.Black;
             btnOneNatural.Location = new Point(501, 159);
             btnOneNatural.Name = "btnOneNatural";
-            btnOneNatural.ShadowDecoration.CustomizableEdges = customizableEdges37;
+            btnOneNatural.ShadowDecoration.CustomizableEdges = customizableEdges35;
             btnOneNatural.Size = new Size(100, 90);
             btnOneNatural.TabIndex = 90;
             btnOneNatural.Text = "1";
             btnOneNatural.Click += btnOneNatural_Click;
             btnOneNatural.DoubleClick += btnOneNatural_DoubleClick;
             // 
+            // flpComplements
+            // 
+            flpComplements.Location = new Point(729, 159);
+            flpComplements.Name = "flpComplements";
+            flpComplements.Size = new Size(567, 412);
+            flpComplements.TabIndex = 91;
+            // 
             // FrmPointOfSale
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(flpComplements);
             Controls.Add(btnOneNatural);
             Controls.Add(btnTwoChiltepin);
             Controls.Add(btnHalfChiltepin);
@@ -698,7 +679,6 @@
             Controls.Add(guna2vSeparator1);
             Controls.Add(btnCancelSale);
             Controls.Add(btnDeleteArticle);
-            Controls.Add(btnOpenComplements);
             Controls.Add(panel2);
             Controls.Add(btnPay);
             Controls.Add(btnAddToCart);
@@ -738,7 +718,6 @@
         private Guna.UI2.WinForms.Guna2VSeparator guna2vSeparator1;
         private Guna.UI2.WinForms.Guna2Button btnCancelSale;
         private Guna.UI2.WinForms.Guna2Button btnDeleteArticle;
-        private Guna.UI2.WinForms.Guna2Button btnOpenComplements;
         private Panel panel2;
         private Label label1;
         private Label lblTotal;
@@ -769,5 +748,6 @@
         private Guna.UI2.WinForms.Guna2Button btnHalfChiltepin;
         private Guna.UI2.WinForms.Guna2Button btnOneChiltepin;
         private Guna.UI2.WinForms.Guna2Button btnOneNatural;
+        private FlowLayoutPanel flpComplements;
     }
 }

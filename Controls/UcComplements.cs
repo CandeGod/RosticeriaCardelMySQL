@@ -31,7 +31,7 @@ namespace RosticeriaCardelV2.Controls
             }
         }
 
-        public int Amount { get; private set; }
+        public int Amount { get; set; }
         public UcComplements()
         {
             InitializeComponent();
@@ -59,7 +59,7 @@ namespace RosticeriaCardelV2.Controls
             
         }
 
-        private void UpdateAmount()
+        public void UpdateAmount()
         {
             lblAmount.Text = "Cantidad: " + Amount.ToString();
             if (_producto != null)

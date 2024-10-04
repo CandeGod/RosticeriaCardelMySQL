@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using RosticeriaCardelV2.Contenedores;
+using RosticeriaCardelV2.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -42,6 +43,8 @@ namespace RosticeriaCardelV2.Formularios
             dgvCart.Columns.Add("Precio", "Precio");
             dgvCart.Columns.Add("Cantidad", "Cantidad");
             dgvCart.Columns.Add("SubTotal", "SubTotal");
+
+            Complements();
         }
 
         //Metodo para el boton seleccionado
@@ -199,17 +202,34 @@ namespace RosticeriaCardelV2.Formularios
                 itemAdded = true;
             }
 
-            // Si no se ha agregado ningún producto, mostrar mensaje de advertencia
+            foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
+            {
+                if (control.Amount > 0)
+                {
+                    int idProducto = control.Producto.IdProducto;
+
+                    AgregarProductoAlCarrito(idProducto); 
+                    itemAdded = true;
+                }
+
+                
+                control.Amount = 0;
+                control.UpdateAmount();
+            }
+
+           
             if (!itemAdded)
             {
                 MessageBox.Show("Debe seleccionar al menos un producto antes de continuar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
-                // Si se ha agregado al menos un producto, reseteamos las selecciones
+                
                 ResetSelections();
             }
         }
+
+
 
         private void ResetSelections()
         {
@@ -278,6 +298,17 @@ namespace RosticeriaCardelV2.Formularios
                     if (btnOneChiltepin.BackColor == Color.LightBlue) cantidad += 1;
                     if (btnTwoChiltepin.BackColor == Color.LightBlue) cantidad += 2;
                     cantidad += comboBoxCantidad; // Sumar la cantidad del ComboBox
+                }
+
+                // --- AÑADIR CANTIDAD DEL USERCONTROL ---
+                // Recorre los controles en el FlowLayoutPanel y añade la cantidad del UserControl
+                foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
+                {
+                    if (control.Producto.IdProducto == idProducto && control.Amount > 0)
+                    {
+                        cantidad += control.Amount; // Sumar la cantidad del UserControl
+                        break; // Salir del bucle una vez encontrado
+                    }
                 }
 
                 // Verificar si el producto ya está en el carrito
@@ -768,6 +799,42 @@ namespace RosticeriaCardelV2.Formularios
         {
             btnAddToCart_Click(sender, e);
             btnPay_Click(sender, e);
+        }
+
+
+        private void Complements()
+        {
+            var products = _productoRepository.GetAllProductos();
+
+            foreach (var product in products)
+            {
+                if (product.IdProducto == 1 || product.IdProducto == 2 || product.IdProducto == 3)
+                {
+                    continue;
+                }
+                var control = new UcComplements
+                {
+                    Producto = product
+                };
+
+                flpComplements.Controls.Add(control);
+            }
+        }
+
+        private void btnAcceptComplements_Click(object sender, EventArgs e)
+        {
+            // Recorre los controles en el FlowLayoutPanel
+            foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
+            {
+                if (control.Amount > 0)
+                {
+                    
+                    int idProducto = control.Producto.IdProducto;
+
+                    
+                    AgregarProductoAlCarrito(idProducto);
+                }
+            }
         }
     }
 }
