@@ -57,6 +57,7 @@
             label3 = new Label();
             txtNombreProducto = new TextBox();
             label2 = new Label();
+            chkActivo = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).BeginInit();
@@ -315,11 +316,22 @@
             label2.TabIndex = 54;
             label2.Text = "Nombre del producto";
             // 
+            // chkActivo
+            // 
+            chkActivo.AutoSize = true;
+            chkActivo.Location = new Point(1245, 405);
+            chkActivo.Name = "chkActivo";
+            chkActivo.Size = new Size(73, 24);
+            chkActivo.TabIndex = 66;
+            chkActivo.Text = "Activo";
+            chkActivo.UseVisualStyleBackColor = true;
+            // 
             // FrmProductos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(chkActivo);
             Controls.Add(btnNew);
             Controls.Add(btnDelete);
             Controls.Add(btnEdit);
@@ -366,5 +378,6 @@
         private Label label2;
         private Guna.UI2.WinForms.Guna2Button btnBack;
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
+        private CheckBox chkActivo;
     }
 }

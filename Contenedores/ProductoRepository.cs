@@ -26,12 +26,13 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    string query = "INSERT INTO Productos (Nombre, Precio, Stock) VALUES (@Nombre, @Precio, @Stock)";
+                    string query = "INSERT INTO Productos (Nombre, Precio, Stock, Activo) VALUES (@Nombre, @Precio, @Stock, @Activo)";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
+                        command.Parameters.AddWithValue("@Activo", producto.Activo);
 
                         //connection.Open();
                         command.ExecuteNonQuery();
@@ -70,7 +71,9 @@ namespace RosticeriaCardelV2.Contenedores
                                     IdProducto = reader["IdProducto"] != DBNull.Value ? Convert.ToInt32(reader["IdProducto"]) : 0,
                                     Nombre = reader["Nombre"] != DBNull.Value ? reader["Nombre"].ToString() : string.Empty,
                                     Precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0m,
-                                    Stock = reader["Stock"] != DBNull.Value ? Convert.ToDecimal(reader["Stock"]) : 0
+                                    Stock = reader["Stock"] != DBNull.Value ? Convert.ToDecimal(reader["Stock"]) : 0,
+                                    Activo = reader["Activo"] != DBNull.Value ? Convert.ToBoolean(reader["Activo"]) : false // Leer el campo Activo
+
                                 };
                                 productos.Add(producto);
                             }
@@ -98,7 +101,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
-                    string query = "SELECT Nombre, Precio FROM Productos WHERE IdProducto = @IdProducto";
+                    string query = "SELECT Nombre, Precio, Activo FROM Productos WHERE IdProducto = @IdProducto";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdProducto", idProducto);
@@ -112,7 +115,9 @@ namespace RosticeriaCardelV2.Contenedores
                                 {
                                     IdProducto = idProducto,
                                     Nombre = reader["Nombre"].ToString(),
-                                    Precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0.0m
+                                    Precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0.0m,
+                                    Activo = reader["Activo"] != DBNull.Value ? Convert.ToBoolean(reader["Activo"]) : false // Leer el campo Activo
+
                                 };
                             }
                         }
@@ -134,12 +139,13 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    string query = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock WHERE IdProducto = @IdProducto";
+                    string query = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock, Activo = @Activo WHERE IdProducto = @IdProducto"; // Incluir Activo en la consulta
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
+                        command.Parameters.AddWithValue("@Activo", producto.Activo); 
                         command.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
 
                         //connection.Open();
@@ -164,12 +170,11 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    string query = "DELETE FROM Productos WHERE IdProducto = @IdProducto";
+                    string query = "UPDATE Productos SET Activo = 0 WHERE IdProducto = @IdProducto"; // Marcar como inactivo
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdProducto", id);
 
-                        //connection.Open();
                         command.ExecuteNonQuery();
                     }
                 }
@@ -183,6 +188,7 @@ namespace RosticeriaCardelV2.Contenedores
                 }
             }
         }
+
 
         public void DecreaseStock(int idProducto, decimal cantidad, MySqlConnection connection, MySqlTransaction transaction)
         {

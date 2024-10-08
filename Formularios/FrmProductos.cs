@@ -43,10 +43,12 @@ namespace RosticeriaCardelV2.Formularios
             dt.Columns.Add("Nombre", typeof(string));
             dt.Columns.Add("Precio", typeof(decimal));
             dt.Columns.Add("Stock", typeof(decimal));
+            dt.Columns.Add("Activo", typeof(bool)); 
+
 
             foreach (var producto in productos)
             {
-                dt.Rows.Add(producto.IdProducto, producto.Nombre, producto.Precio, producto.Stock);
+                dt.Rows.Add(producto.IdProducto, producto.Nombre, producto.Precio, producto.Stock, producto.Activo);
             }
 
             return dt;
@@ -70,7 +72,8 @@ namespace RosticeriaCardelV2.Formularios
                         {
                             Nombre = txtNombreProducto.Text,
                             Precio = decimal.Parse(txtPrecio.Text),
-                            Stock = decimal.Parse(txtStock.Text)
+                            Stock = decimal.Parse(txtStock.Text),
+                            Activo = chkActivo.Checked // Usar el CheckBox para el estado activo
                         };
 
                         _productoRepository.AddProducto(p);
@@ -107,7 +110,8 @@ namespace RosticeriaCardelV2.Formularios
                             IdProducto = int.Parse(txtIdProducto.Text),
                             Nombre = txtNombreProducto.Text,
                             Precio = decimal.Parse(txtPrecio.Text),
-                            Stock = decimal.Parse(txtStock.Text)
+                            Stock = decimal.Parse(txtStock.Text),
+                            Activo = chkActivo.Checked // Usar el CheckBox para el estado activo
                         };
 
                         _productoRepository.UpdateProducto(p);
@@ -125,7 +129,6 @@ namespace RosticeriaCardelV2.Formularios
                 }
             }
         }
-
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -178,6 +181,8 @@ namespace RosticeriaCardelV2.Formularios
                     txtNombreProducto.Text = row.Cells[1].Value?.ToString();
                     txtPrecio.Text = row.Cells[2].Value?.ToString();
                     txtStock.Text = row.Cells[3].Value?.ToString();
+                    chkActivo.Checked = (bool)row.Cells[4].Value; // Obtener el estado activo del producto
+
                     btnAdd.Enabled = false;
                     btnEdit.Enabled = true;
                 }
@@ -186,7 +191,6 @@ namespace RosticeriaCardelV2.Formularios
             {
                 MessageBox.Show("Error al cargar la información del producto: " + ex.Message);
             }
-
         }
 
         private void limpiar()
@@ -195,6 +199,7 @@ namespace RosticeriaCardelV2.Formularios
             txtNombreProducto.Clear();
             txtPrecio.Clear();
             txtStock.Clear();
+            chkActivo.Checked = false; // Reiniciar el CheckBox
             txtNombreProducto.Focus();
         }
 

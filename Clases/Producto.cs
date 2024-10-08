@@ -12,7 +12,6 @@ namespace RosticeriaCardelV2.Clases
         public string Nombre { get; set; }
         public decimal Precio { get; set; }
         public decimal Stock {  get; set; }
-
         public bool Activo { get; set; }
 
         public Producto()
