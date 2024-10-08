@@ -13,7 +13,6 @@ namespace RosticeriaCardelV2.Controls
 {
     public partial class UcComplements : UserControl
     {
-
         private Producto _producto;
 
         public Producto Producto
@@ -24,14 +23,25 @@ namespace RosticeriaCardelV2.Controls
                 _producto = value;
                 if (_producto != null)
                 {
-                    lblNameOfProduct.Text = _producto.Nombre;
-                    lblPrice.Text = "Precio: " + _producto.Precio.ToString("C2");
-                    lblStock.Text = "Stock: " + _producto.Stock.ToString();
+                    // Verificar si el producto está activo
+                    if (!_producto.Activo) // Cambia a esta línea si Activo es bool
+                    {
+                        this.Visible = false; // Oculta el UserControl si el producto está inactivo
+                    }
+                    else
+                    {
+                        lblNameOfProduct.Text = _producto.Nombre;
+                        lblPrice.Text = "Precio: " + _producto.Precio.ToString("C2");
+                        lblStock.Text = "Stock: " + _producto.Stock.ToString();
+                        this.Visible = true; // Asegúrate de que el UserControl se muestre si está activo
+                    }
                 }
             }
         }
 
+
         public int Amount { get; set; }
+
         public UcComplements()
         {
             InitializeComponent();
@@ -39,7 +49,6 @@ namespace RosticeriaCardelV2.Controls
             _producto = new Producto(); // Inicializa _producto para evitar NullReferenceException
             UpdateAmount();
         }
-
 
         private void btnIncreaseProduct_Click(object sender, EventArgs e)
         {
@@ -56,7 +65,6 @@ namespace RosticeriaCardelV2.Controls
                 _producto.Stock++;
                 UpdateAmount();
             }
-            
         }
 
         public void UpdateAmount()
@@ -67,7 +75,7 @@ namespace RosticeriaCardelV2.Controls
                 lblStock.Text = "Stock: " + _producto.Stock.ToString();
             }
         }
-
     }
+
 }
 
