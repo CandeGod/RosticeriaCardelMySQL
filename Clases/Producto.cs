@@ -13,10 +13,12 @@ namespace RosticeriaCardelV2.Clases
         public decimal Precio { get; set; }
         public decimal Stock {  get; set; }
         public bool Activo { get; set; }
+        public List<VariacionProducto> Variaciones { get; set; }
 
         public Producto()
         {
-            Activo = true; 
+            Activo = true;
+            Variaciones = new List<VariacionProducto>();
         }
 
         
@@ -26,7 +28,8 @@ namespace RosticeriaCardelV2.Clases
             Nombre = nombre;
             Precio = precio;
             Stock = stock;
-            Activo = activo; 
+            Activo = activo;
+            Variaciones = new List<VariacionProducto>();
         }
 
         
@@ -35,7 +38,10 @@ namespace RosticeriaCardelV2.Clases
             Nombre = nombre;
             Precio = precio;
             Stock = stock;
-            Activo = true; 
+            Activo = true;
+            Variaciones = new List<VariacionProducto>();
         }
+
+
     }
 }

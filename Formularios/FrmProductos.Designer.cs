@@ -39,6 +39,8 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmProductos));
             dgvProductos = new DataGridView();
             panel1 = new Panel();
@@ -58,6 +60,7 @@
             txtNombreProducto = new TextBox();
             label2 = new Label();
             chkActivo = new CheckBox();
+            btnVariacion = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).BeginInit();
@@ -326,11 +329,37 @@
             chkActivo.Text = "Activo";
             chkActivo.UseVisualStyleBackColor = true;
             // 
+            // btnVariacion
+            // 
+            btnVariacion.BorderRadius = 30;
+            btnVariacion.BorderThickness = 2;
+            btnVariacion.CustomizableEdges = customizableEdges12;
+            btnVariacion.DisabledState.BorderColor = Color.DarkGray;
+            btnVariacion.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnVariacion.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnVariacion.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnVariacion.FillColor = Color.FromArgb(126, 218, 81);
+            btnVariacion.Font = new Font("Segoe UI", 22.2F, FontStyle.Bold);
+            btnVariacion.ForeColor = Color.Black;
+            btnVariacion.Image = Properties.Resources.anadir;
+            btnVariacion.ImageAlign = HorizontalAlignment.Right;
+            btnVariacion.ImageOffset = new Point(10, 0);
+            btnVariacion.ImageSize = new Size(50, 50);
+            btnVariacion.Location = new Point(65, 518);
+            btnVariacion.Name = "btnVariacion";
+            btnVariacion.ShadowDecoration.CustomizableEdges = customizableEdges13;
+            btnVariacion.Size = new Size(280, 62);
+            btnVariacion.TabIndex = 67;
+            btnVariacion.Text = "Agregar";
+            btnVariacion.TextOffset = new Point(-20, 0);
+            btnVariacion.Click += btnVariacion_Click;
+            // 
             // FrmProductos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(btnVariacion);
             Controls.Add(chkActivo);
             Controls.Add(btnNew);
             Controls.Add(btnDelete);
@@ -379,5 +408,6 @@
         private Guna.UI2.WinForms.Guna2Button btnBack;
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
         private CheckBox chkActivo;
+        private Guna.UI2.WinForms.Guna2Button btnVariacion;
     }
 }

@@ -43,7 +43,7 @@ namespace RosticeriaCardelV2.Formularios
             dt.Columns.Add("Nombre", typeof(string));
             dt.Columns.Add("Precio", typeof(decimal));
             dt.Columns.Add("Stock", typeof(decimal));
-            dt.Columns.Add("Activo", typeof(bool)); 
+            dt.Columns.Add("Activo", typeof(bool));
 
 
             foreach (var producto in productos)
@@ -290,6 +290,14 @@ namespace RosticeriaCardelV2.Formularios
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnVariacion_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FrmAgregarVariacion frm = new FrmAgregarVariacion();
+            frm.ShowDialog();
+            this.Show();
         }
     }
 }
