@@ -574,7 +574,7 @@ namespace RosticeriaCardelV2.Formularios
 
                                         // Obtener información del producto a partir del IdProducto
                                         Producto producto = _productoRepository.GetProductoById(detalle.IdProducto);
-                                        VariacionProducto  variacionProducto = _variacionProductoRepository.GetVariacionById(detalle.IdProducto);
+                                        VariacionProducto  variacionProducto = _variacionProductoRepository.GetVariacionById(detalle.IdVariacionProducto);
 
                                         if (producto != null)
                                         {
@@ -668,7 +668,10 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     detalles.Add(new DetalleVenta
                     {
+                        IdVenta = idVenta, // Asegúrate de que esto también esté asignado
                         IdProducto = Convert.ToInt32(row.Cells["IdProducto"].Value),
+                        IdVariacionProducto = Convert.ToInt32(row.Cells["IdVariacion"].Value), // Asegúrate de que esta celda existe
+                        NombreVariacion = row.Cells["Producto"].Value?.ToString(), // Asegúrate de que esta celda existe
                         Cantidad = Convert.ToDecimal(row.Cells["Cantidad"].Value),
                         Subtotal = Convert.ToDecimal(row.Cells["Subtotal"].Value)
                     });
@@ -676,6 +679,7 @@ namespace RosticeriaCardelV2.Formularios
             }
             return detalles;
         }
+
 
         private void LimpiarFormulario()
         {

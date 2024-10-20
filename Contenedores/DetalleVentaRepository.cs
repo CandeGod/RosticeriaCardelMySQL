@@ -21,11 +21,12 @@ namespace RosticeriaCardelV2.Contenedores
 
         public void AddDetalleVenta(DetalleVenta detalle, int idVenta, MySqlConnection connection, MySqlTransaction transaction)
         {
-            string query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, Cantidad, Subtotal) VALUES (@IdVenta, @IdProducto, @Cantidad, @Subtotal)";
+            string query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
             using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@IdVenta", idVenta);
                 command.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
+                command.Parameters.AddWithValue("@IdVariacion", detalle.IdVariacionProducto);
                 command.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
                 command.Parameters.AddWithValue("@Subtotal", detalle.Subtotal);
 
