@@ -57,10 +57,12 @@ namespace RosticeriaCardelV2.Formularios
                 foreach (DataRow row in dt.Rows)
                 {
                     string producto = row["Nombre"].ToString();
+                    string nombreVariacion = row["NombreVariacion"].ToString();
+                    string descripcionCompleta = $"{producto} - {nombreVariacion}";
                     string cantidad = row["Cantidad"].ToString().PadLeft(3);
                     string subtotal = Convert.ToDecimal(row["Subtotal"]).ToString("C2").PadLeft(10);
 
-                    ticket.AppendLine($"{producto.PadRight(20)}{cantidad.PadRight(10)}{subtotal}");
+                    ticket.AppendLine($"{descripcionCompleta.PadRight(30)}{cantidad.PadRight(10)}{subtotal}");
                     ticket.AppendLine(new string('-', 53));
                 }
 
@@ -116,10 +118,13 @@ namespace RosticeriaCardelV2.Formularios
                     foreach (DataRow row in dt.Rows)
                     {
                         string producto = row["Producto"].ToString();
+                        string variacion = row["NombreVariacion"].ToString(); 
                         decimal cantidadVendida = Convert.ToDecimal(row["CantidadVendida"]);
                         decimal subtotal = Convert.ToDecimal(row["Subtotal"]);
 
-                        resumen.AppendLine($"{producto.PadRight(12)} {cantidadVendida.ToString("0.0").PadLeft(8)}  {subtotal.ToString("C2").PadLeft(8)}");
+                        string descripcionCompleta = $"{producto} - {variacion}";
+
+                        resumen.AppendLine($"{descripcionCompleta.PadRight(12)} {cantidadVendida.ToString("0.0").PadLeft(8)}  {subtotal.ToString("C2").PadLeft(8)}");
 
                         totalRecaudado += subtotal;
                     }
@@ -164,10 +169,12 @@ namespace RosticeriaCardelV2.Formularios
                     foreach (DataRow row in dt.Rows)
                     {
                         string producto = row["Producto"].ToString();
+                        string nombreVariacion = row["NombreVariacion"].ToString();
+                        string descripcionCompleta = $"{producto} - {nombreVariacion}";
                         decimal cantidadVendida = Convert.ToDecimal(row["CantidadVendida"]);
                         decimal subtotal = Convert.ToDecimal(row["Subtotal"]);
 
-                        resumen.AppendLine($"{producto.PadRight(12)} {cantidadVendida.ToString("0.0").PadLeft(8)}  {subtotal.ToString("C2").PadLeft(8)}");
+                        resumen.AppendLine($"{descripcionCompleta.PadRight(12)} {cantidadVendida.ToString("0.0").PadLeft(8)}  {subtotal.ToString("C2").PadLeft(8)}");
 
                         totalRecaudado += subtotal;
                     }
@@ -211,10 +218,12 @@ namespace RosticeriaCardelV2.Formularios
                 foreach (DataRow row in dt.Rows)
                 {
                     string producto = row["Producto"].ToString();
+                    string nombreVariacion = row["NombreVariacion"].ToString();
+                    string descripcionCompleta = $"{producto} - {nombreVariacion}";
                     decimal cantidadVendida = Convert.ToDecimal(row["CantidadVendida"]);
                     decimal subtotal = Convert.ToDecimal(row["Subtotal"]);
 
-                    resumen.AppendLine($"{producto.PadRight(12)} {cantidadVendida.ToString("0.0").PadLeft(8)}  {subtotal.ToString("C2").PadLeft(8)}");
+                    resumen.AppendLine($"{descripcionCompleta.PadRight(12)} {cantidadVendida.ToString("0.0").PadLeft(8)}  {subtotal.ToString("C2").PadLeft(8)}");
 
                     totalRecaudado += subtotal;
                 }

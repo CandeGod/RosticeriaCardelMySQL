@@ -44,22 +44,27 @@ namespace RosticeriaCardelV2.Contenedores
                 {
                     string query = @"
                     SELECT 
-                        v.IdVenta,
-                        v.Fecha,
-                        v.MontoPagado, 
-                        v.Cambio,
-                        p.Nombre, 
-                        dv.Cantidad, 
-                        p.Precio,
-                        dv.Subtotal 
-                    FROM 
-                        Ventas v
-                    INNER JOIN 
-                        DetalleVenta dv ON v.IdVenta = dv.IdVenta
-                    INNER JOIN 
-                        Productos p ON dv.IdProducto = p.IdProducto
-                    WHERE 
-                        v.IdVenta = @IdVenta";
+                    v.IdVenta,
+                    v.Fecha,
+                    v.MontoPagado, 
+                    v.Cambio,
+                    p.Nombre,
+                    va.NombreVariacion,
+                    SUM(dv.Cantidad) AS Cantidad, 
+                    p.Precio,
+                    SUM(dv.Subtotal) AS Subtotal 
+                FROM 
+                    Ventas v
+                INNER JOIN 
+                    DetalleVenta dv ON v.IdVenta = dv.IdVenta
+                INNER JOIN 
+                    Productos p ON dv.IdProducto = p.IdProducto
+                INNER JOIN
+                    Variaciones va ON dv.IdVariacion = va.IdVariacion 
+                WHERE 
+                    v.IdVenta = @IdVenta
+                GROUP BY 
+                    v.IdVenta, v.Fecha, v.MontoPagado, v.Cambio, p.Nombre, va.NombreVariacion, p.Precio";
                     
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -88,6 +93,7 @@ namespace RosticeriaCardelV2.Contenedores
                     string query = @"
                     SELECT 
                         p.Nombre AS Producto,
+                        va.NombreVariacion,
                         SUM(dv.Cantidad) AS CantidadVendida,
                         SUM(dv.Subtotal) AS Subtotal
                     FROM 
@@ -96,10 +102,12 @@ namespace RosticeriaCardelV2.Contenedores
                         DetalleVenta dv ON v.IdVenta = dv.IdVenta
                     INNER JOIN 
                         Productos p ON dv.IdProducto = p.IdProducto
+                    INNER JOIN 
+                        Variaciones va ON dv.IdVariacion = va.IdVariacion  
                     WHERE 
                         MONTH(v.Fecha) = @Mes
                     GROUP BY 
-                        p.Nombre";
+                        p.Nombre, va.NombreVariacion";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -144,6 +152,7 @@ namespace RosticeriaCardelV2.Contenedores
             string query = $@"
             SELECT 
                 p.Nombre AS Producto, 
+                va.NombreVariacion, 
                 SUM(dv.Cantidad) AS CantidadVendida, 
                 SUM(dv.Subtotal) AS Subtotal 
             FROM 
@@ -152,10 +161,12 @@ namespace RosticeriaCardelV2.Contenedores
                 DetalleVenta dv ON v.IdVenta = dv.IdVenta 
             INNER JOIN 
                 Productos p ON dv.IdProducto = p.IdProducto 
+            INNER JOIN 
+                Variaciones va ON dv.IdVariacion = va.IdVariacion 
             WHERE 
                 {condicionFecha} 
             GROUP BY 
-                p.Nombre";
+                p.Nombre, va.NombreVariacion"; 
 
             try
             {
@@ -176,16 +187,29 @@ namespace RosticeriaCardelV2.Contenedores
             return dt;
         }
 
+
         public DataTable GetSalesBySpecificDate(DateTime fecha)
         {
             DataTable dt = new DataTable();
 
-            string query = "SELECT p.Nombre AS Producto, SUM(dv.Cantidad) AS CantidadVendida, SUM(dv.Subtotal) AS Subtotal " +
-                           "FROM Ventas v " +
-                           "INNER JOIN DetalleVenta dv ON v.IdVenta = dv.IdVenta " +
-                           "INNER JOIN Productos p ON dv.IdProducto = p.IdProducto " +
-                           "WHERE DATE(v.Fecha) = @Fecha " +
-                           "GROUP BY p.Nombre";
+            string query = @"
+            SELECT 
+                p.Nombre AS Producto, 
+                va.NombreVariacion, 
+                SUM(dv.Cantidad) AS CantidadVendida, 
+                SUM(dv.Subtotal) AS Subtotal 
+            FROM 
+                Ventas v 
+            INNER JOIN 
+                DetalleVenta dv ON v.IdVenta = dv.IdVenta 
+            INNER JOIN 
+                Productos p ON dv.IdProducto = p.IdProducto 
+            INNER JOIN 
+                Variaciones va ON dv.IdVariacion = va.IdVariacion 
+            WHERE 
+                DATE(v.Fecha) = @Fecha 
+            GROUP BY 
+                p.Nombre, va.NombreVariacion"; 
 
             try
             {
@@ -207,6 +231,7 @@ namespace RosticeriaCardelV2.Contenedores
 
             return dt;
         }
+
 
         public DataTable GetSalesSummaryByFilterdgv(string filtro)
         {
