@@ -24,6 +24,7 @@ namespace RosticeriaCardelV2.Formularios
         private VentaRepository _ventaRepository;
         private ProductoRepository _productoRepository;
         private DetalleVentaRepository _detalleVentaRepository;
+        private VariacionProductoRepository _variacionProductoRepository;
 
 
         public FrmPointOfSale()
@@ -34,11 +35,13 @@ namespace RosticeriaCardelV2.Formularios
             _ventaRepository = new VentaRepository(_databaseConnection);
             _productoRepository = new ProductoRepository(_databaseConnection);
             _detalleVentaRepository = new DetalleVentaRepository(_databaseConnection);
+            _variacionProductoRepository = new VariacionProductoRepository(_databaseConnection);
         }
 
         private void FrmPointOfSale_Load(object sender, EventArgs e)
         {
             dgvCart.Columns.Add("idProducto", "ID Producto");
+            dgvCart.Columns.Add("idVariacion", "Id Variacion");
             dgvCart.Columns.Add("Producto", "Producto");
             dgvCart.Columns.Add("Precio", "Precio");
             dgvCart.Columns.Add("Cantidad", "Cantidad");
@@ -184,21 +187,21 @@ namespace RosticeriaCardelV2.Formularios
             // Verificar y agregar Pollo Natural al carrito
             if (btnOneNatural.BackColor == Color.LightBlue || btnTwoNatural.BackColor == Color.LightBlue || cbAmountNatural.SelectedIndex != -1 || btnHalfNatural.BackColor == Color.LightBlue)
             {
-                AgregarProductoAlCarrito(1); // Pollo Natural con IdProducto = 1
+                AgregarProductoAlCarrito(1, 1); // Pollo Natural con IdProducto = 1
                 itemAdded = true;
             }
 
             // Verificar y agregar Pollo Adobado al carrito
             if (btnOneAdobado.BackColor == Color.LightBlue || btnTwoAdobado.BackColor == Color.LightBlue || cbAmountAdobado.SelectedIndex != -1 || btnHalfAdobado.BackColor == Color.LightBlue)
             {
-                AgregarProductoAlCarrito(2); // Pollo Adobado con IdProducto = 2
+                AgregarProductoAlCarrito(1,2); // Pollo Adobado con IdProducto = 2
                 itemAdded = true;
             }
 
             // Verificar y agregar Pollo Chiltepin al carrito
             if (btnOneChiltepin.BackColor == Color.LightBlue || btnTwoChiltepin.BackColor == Color.LightBlue || cbAmountChiltepin.SelectedIndex != -1 || btnHalfChiltepin.BackColor == Color.LightBlue)
             {
-                AgregarProductoAlCarrito(3); // Pollo Chiltepin con IdProducto = 3
+                AgregarProductoAlCarrito(1,3); // Pollo Chiltepin con IdProducto = 3
                 itemAdded = true;
             }
 
@@ -247,6 +250,104 @@ namespace RosticeriaCardelV2.Formularios
             btnTwoChiltepin.BackColor = SystemColors.Control;
             btnHalfChiltepin.BackColor = SystemColors.Control;
             cbAmountChiltepin.SelectedIndex = -1;
+        }
+        private void AgregarProductoAlCarrito(int idProducto, int idVariacion)
+        {
+            // Obtener el producto desde el repositorio
+            ProductoRepository productoRepository = new ProductoRepository(new DatabaseConnection());
+            Producto producto = productoRepository.GetProductoById(idProducto);
+
+            // Obtener la variación desde el repositorio
+            VariacionProductoRepository variacionRepository = new VariacionProductoRepository(new DatabaseConnection());
+            VariacionProducto variacion = variacionRepository.GetVariacionById(idVariacion);
+
+            if (producto != null && variacion != null)
+            {
+                decimal cantidad = 0; // Cantidad total inicial
+                decimal precio = variacion.Precio; // Usar el precio de la variación
+                string nombre = producto.Nombre + " - " + variacion.NombreVariacion; // Nombre del producto
+
+                // Obtener la cantidad del ComboBox
+                decimal comboBoxCantidad = 0;
+                if (idProducto == 1 && cbAmountNatural.SelectedIndex != -1 && idVariacion == 1)
+                {
+                    comboBoxCantidad = Convert.ToDecimal(cbAmountNatural.SelectedItem);
+                }
+                if (idProducto == 1 && cbAmountAdobado.SelectedIndex != -1 && idVariacion ==2)
+                {
+                    comboBoxCantidad = Convert.ToDecimal(cbAmountAdobado.SelectedItem);
+                }
+                if (idProducto == 1 && cbAmountChiltepin.SelectedIndex != -1 && idVariacion == 3)
+                {
+                    comboBoxCantidad = Convert.ToDecimal(cbAmountChiltepin.SelectedItem);
+                }
+
+                // Sumar la cantidad de los botones seleccionados
+                if (idProducto == 1 && idVariacion == 1) // Pollo Natural
+                {
+                    if (btnHalfNatural.BackColor == Color.LightBlue) cantidad += 0.5m;
+                    if (btnOneNatural.BackColor == Color.LightBlue) cantidad += 1;
+                    if (btnTwoNatural.BackColor == Color.LightBlue) cantidad += 2;
+                }
+                if (idProducto == 1 && idVariacion == 2) // Pollo Adobado
+                {
+                    if (btnHalfAdobado.BackColor == Color.LightBlue) cantidad += 0.5m;
+                    if (btnOneAdobado.BackColor == Color.LightBlue) cantidad += 1;
+                    if (btnTwoAdobado.BackColor == Color.LightBlue) cantidad += 2;
+                }
+                if (idProducto == 1 && idVariacion == 3) // Pollo Chiltepin
+                {
+                    if (btnHalfChiltepin.BackColor == Color.LightBlue) cantidad += 0.5m;
+                    if (btnOneChiltepin.BackColor == Color.LightBlue) cantidad += 1;
+                    if (btnTwoChiltepin.BackColor == Color.LightBlue) cantidad += 2;
+                }
+
+                // Sumar la cantidad del ComboBox
+                cantidad += comboBoxCantidad;
+
+                // --- AÑADIR CANTIDAD DEL USERCONTROL ---
+                // Recorre los controles en el FlowLayoutPanel y añade la cantidad del UserControl
+                foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
+                {
+                    if (control.Producto.IdProducto == idProducto && control.Amount > 0)
+                    {
+                        cantidad += control.Amount; // Sumar la cantidad del UserControl
+                        break; // Salir del bucle una vez encontrado
+                    }
+                }
+
+                // Asegurarse de que la cantidad sea mayor que 0 antes de agregar al carrito
+                if (cantidad <= 0)
+                {
+                    MessageBox.Show("La cantidad debe ser mayor que 0 para agregar al carrito.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; // Salir del método si la cantidad es 0
+                }
+
+                // Verificar si el producto ya está en el carrito
+                foreach (DataGridViewRow row in dgvCart.Rows)
+                {
+                    if (Convert.ToInt32(row.Cells["idProducto"].Value) == idProducto && Convert.ToInt32(row.Cells["idVariacion"].Value) == idVariacion)
+                    {
+                        // Actualizar cantidad y subtotal si el producto ya existe
+                        decimal existingQuantity = Convert.ToDecimal(row.Cells["Cantidad"].Value);
+                        decimal existingSubtotal = Convert.ToDecimal(row.Cells["SubTotal"].Value);
+
+                        row.Cells["Cantidad"].Value = existingQuantity + cantidad;
+                        row.Cells["SubTotal"].Value = existingSubtotal + (cantidad * precio);
+                        UpdateTotalSale();
+                        return;
+                    }
+                }
+
+                // Si el producto no está en el carrito, añadirlo
+                decimal subtotal = cantidad * precio;
+                dgvCart.Rows.Add(idProducto, idVariacion, nombre, precio, cantidad, subtotal); // Asegúrate de que idVariacion esté incluido en la fila
+                UpdateTotalSale();
+            }
+            else
+            {
+                MessageBox.Show("El producto o variación seleccionada no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AgregarProductoAlCarrito(int idProducto)
@@ -452,6 +553,7 @@ namespace RosticeriaCardelV2.Formularios
 
                                 // Listas para almacenar los productos, cantidades, precios, y subtotales
                                 List<string> nombresProductos = new List<string>();
+                                List<string> variacionesProductos = new List<string>();
                                 List<decimal> cantidades = new List<decimal>();
                                 List<decimal> precios = new List<decimal>();
                                 List<decimal> subtotales = new List<decimal>();
@@ -472,10 +574,12 @@ namespace RosticeriaCardelV2.Formularios
 
                                         // Obtener información del producto a partir del IdProducto
                                         Producto producto = _productoRepository.GetProductoById(detalle.IdProducto);
+                                        VariacionProducto  variacionProducto = _variacionProductoRepository.GetVariacionById(detalle.IdProducto);
 
                                         if (producto != null)
                                         {
                                             nombresProductos.Add(producto.Nombre);
+                                            variacionesProductos.Add(variacionProducto.NombreVariacion);
                                             cantidades.Add(detalle.Cantidad);
                                             precios.Add(producto.Precio);
                                             subtotales.Add(detalle.Subtotal);
@@ -510,7 +614,7 @@ namespace RosticeriaCardelV2.Formularios
                                 transaction.Commit();
 
                                 // Imprimir el ticket
-                                PrintTicket(idVenta, totalCarrito, nombresProductos, cantidades, precios, subtotales, montoPagado, cambio);
+                                PrintTicket(idVenta, totalCarrito, nombresProductos, variacionesProductos, cantidades, precios, subtotales, montoPagado, cambio);
 
                                 MessageBox.Show($"Venta registrada con éxito. Cambio: {cambio:C}", "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 LimpiarFormulario();
@@ -580,7 +684,7 @@ namespace RosticeriaCardelV2.Formularios
         }
 
 
-        private void PrintTicket(int idVenta, decimal total, List<string> productos, List<decimal> cantidades, List<decimal> precios, List<decimal> subtotales, decimal montoPago, decimal cambio)
+        private void PrintTicket(int idVenta, decimal total, List<string> productos, List<string>variaciones, List<decimal> cantidades, List<decimal> precios, List<decimal> subtotales, decimal montoPago, decimal cambio)
         {
             StringBuilder ticket = new StringBuilder();
 
@@ -605,6 +709,7 @@ namespace RosticeriaCardelV2.Formularios
             for (int i = 0; i < productos.Count; i++)
             {
                 string producto = productos[i];
+                string variacion = variaciones[i];
                 string cantidad = cantidades[i].ToString().PadLeft(3);
                 string subtotal = subtotales[i].ToString("C2").PadLeft(subtotalWidth);
 
@@ -626,6 +731,7 @@ namespace RosticeriaCardelV2.Formularios
                 System.Drawing.Printing.PrintDocument printDoc = new System.Drawing.Printing.PrintDocument();
                 printDoc.PrintPage += (s, ev) =>
                 {
+
                     // Cargar la imagen (asegúrate de que la ruta es correcta)
                     Image logo = Image.FromFile(@"C:\Users\cande\Downloads\RosticeríaSabrosonPNG (3).png"); // Reemplaza con la ruta de tu imagen
 
@@ -660,10 +766,12 @@ namespace RosticeriaCardelV2.Formularios
                     for (int i = 0; i < productos.Count; i++)
                     {
                         string producto = productos[i];
+                        string variacion = variaciones[i];
+                        string descripcion = $"{producto} - {variacion}";
                         string cantidad = cantidades[i].ToString().PadLeft(3);
                         string subtotal = subtotales[i].ToString("C2").PadLeft(subtotalWidth);
 
-                        ev.Graphics.DrawString($"{producto.PadRight(descripcionWidth)}{cantidad.PadRight(cantidadWidth)}{subtotal}", regularFont, Brushes.Black, new PointF(leftMargin, yPos));
+                        ev.Graphics.DrawString($"{descripcion.PadRight(descripcionWidth)}{cantidad.PadRight(cantidadWidth)}{subtotal}", regularFont, Brushes.Black, new PointF(leftMargin, yPos));
                         yPos += regularFont.GetHeight(ev.Graphics);
                         ev.Graphics.DrawString(new string('-', 42), regularFont, Brushes.Black, new PointF(leftMargin, yPos));
                         yPos += regularFont.GetHeight(ev.Graphics);

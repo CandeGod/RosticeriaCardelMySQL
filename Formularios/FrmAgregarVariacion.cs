@@ -11,22 +11,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace RosticeriaCardelV2.Formularios
-{
-    public partial class FrmAgregarVariacion : Form
+    namespace RosticeriaCardelV2.Formularios
     {
+        public partial class FrmAgregarVariacion : Form
+        {
         
-            private ProductoRepository _productoRepository;
-            private VariacionProductoRepository _variacionProductoRepository;
+                private ProductoRepository _productoRepository;
+                private VariacionProductoRepository _variacionProductoRepository;
 
-            public FrmAgregarVariacion()
-            {
-                InitializeComponent();
-                DatabaseConnection databaseConnection = new DatabaseConnection();
-                _productoRepository = new ProductoRepository(databaseConnection);
-                _variacionProductoRepository = new VariacionProductoRepository(databaseConnection);
-                LlenarComboBoxProductos();
-            }
+                public FrmAgregarVariacion()
+                {
+                    InitializeComponent();
+                    DatabaseConnection databaseConnection = new DatabaseConnection();
+                    _productoRepository = new ProductoRepository(databaseConnection);
+                    _variacionProductoRepository = new VariacionProductoRepository(databaseConnection);
+                    LlenarComboBoxProductos();
+                }
 
             private void LlenarComboBoxProductos()
             {
