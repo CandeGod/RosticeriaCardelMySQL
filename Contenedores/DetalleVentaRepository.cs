@@ -21,18 +21,29 @@ namespace RosticeriaCardelV2.Contenedores
 
         public void AddDetalleVenta(DetalleVenta detalle, int idVenta, MySqlConnection connection, MySqlTransaction transaction)
         {
-            string query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
+            string query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) " +
+                           "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
             using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@IdVenta", idVenta);
                 command.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
-                command.Parameters.AddWithValue("@IdVariacion", detalle.IdVariacionProducto);
                 command.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
                 command.Parameters.AddWithValue("@Subtotal", detalle.Subtotal);
+
+                // Si IdVariacionProducto es mayor que 0, lo insertamos; de lo contrario, ponemos NULL
+                if (detalle.IdVariacionProducto > 0)
+                {
+                    command.Parameters.AddWithValue("@IdVariacion", detalle.IdVariacionProducto);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@IdVariacion", DBNull.Value); // Inserta NULL si no hay variación
+                }
 
                 command.ExecuteNonQuery();
             }
         }
+
 
         public DataTable GetSaleDetails(int idVenta)
         {
@@ -44,27 +55,27 @@ namespace RosticeriaCardelV2.Contenedores
                 {
                     string query = @"
                     SELECT 
-                    v.IdVenta,
-                    v.Fecha,
-                    v.MontoPagado, 
-                    v.Cambio,
-                    p.Nombre,
-                    va.NombreVariacion,
-                    SUM(dv.Cantidad) AS Cantidad, 
-                    p.Precio,
-                    SUM(dv.Subtotal) AS Subtotal 
-                FROM 
-                    Ventas v
-                INNER JOIN 
-                    DetalleVenta dv ON v.IdVenta = dv.IdVenta
-                INNER JOIN 
-                    Productos p ON dv.IdProducto = p.IdProducto
-                INNER JOIN
-                    Variaciones va ON dv.IdVariacion = va.IdVariacion 
-                WHERE 
-                    v.IdVenta = @IdVenta
-                GROUP BY 
-                    v.IdVenta, v.Fecha, v.MontoPagado, v.Cambio, p.Nombre, va.NombreVariacion, p.Precio";
+                        v.IdVenta,
+                        v.Fecha,
+                        v.MontoPagado, 
+                        v.Cambio,
+                        p.Nombre,
+                        va.NombreVariacion,
+                        SUM(dv.Cantidad) AS Cantidad, 
+                        p.Precio,
+                        SUM(dv.Subtotal) AS Subtotal 
+                    FROM 
+                        Ventas v
+                    INNER JOIN 
+                        DetalleVenta dv ON v.IdVenta = dv.IdVenta
+                    INNER JOIN 
+                        Productos p ON dv.IdProducto = p.IdProducto
+                    LEFT JOIN
+                        Variaciones va ON dv.IdVariacion = va.IdVariacion 
+                    WHERE 
+                        v.IdVenta = @IdVenta
+                    GROUP BY 
+                        v.IdVenta, v.Fecha, v.MontoPagado, v.Cambio, p.Nombre, va.NombreVariacion, p.Precio";
                     
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -102,7 +113,7 @@ namespace RosticeriaCardelV2.Contenedores
                         DetalleVenta dv ON v.IdVenta = dv.IdVenta
                     INNER JOIN 
                         Productos p ON dv.IdProducto = p.IdProducto
-                    INNER JOIN 
+                    LEFT JOIN 
                         Variaciones va ON dv.IdVariacion = va.IdVariacion  
                     WHERE 
                         MONTH(v.Fecha) = @Mes
@@ -161,7 +172,7 @@ namespace RosticeriaCardelV2.Contenedores
                 DetalleVenta dv ON v.IdVenta = dv.IdVenta 
             INNER JOIN 
                 Productos p ON dv.IdProducto = p.IdProducto 
-            INNER JOIN 
+            LEFT JOIN 
                 Variaciones va ON dv.IdVariacion = va.IdVariacion 
             WHERE 
                 {condicionFecha} 
@@ -204,7 +215,7 @@ namespace RosticeriaCardelV2.Contenedores
                 DetalleVenta dv ON v.IdVenta = dv.IdVenta 
             INNER JOIN 
                 Productos p ON dv.IdProducto = p.IdProducto 
-            INNER JOIN 
+            LEFT JOIN 
                 Variaciones va ON dv.IdVariacion = va.IdVariacion 
             WHERE 
                 DATE(v.Fecha) = @Fecha 

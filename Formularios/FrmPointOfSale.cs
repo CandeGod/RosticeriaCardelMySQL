@@ -362,6 +362,7 @@ namespace RosticeriaCardelV2.Formularios
                 decimal cantidad = 0;
                 decimal precio = producto.Precio;
                 string nombre = producto.Nombre;
+                int? idVariacion = null; // No hay variación
 
                 // Obtener la cantidad del ComboBox, si está seleccionado
                 decimal comboBoxCantidad = 0;
@@ -402,13 +403,12 @@ namespace RosticeriaCardelV2.Formularios
                 }
 
                 // --- AÑADIR CANTIDAD DEL USERCONTROL ---
-                // Recorre los controles en el FlowLayoutPanel y añade la cantidad del UserControl
                 foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
                 {
                     if (control.Producto.IdProducto == idProducto && control.Amount > 0)
                     {
                         cantidad += control.Amount; // Sumar la cantidad del UserControl
-                        break; // Salir del bucle una vez encontrado
+                        break;
                     }
                 }
 
@@ -430,7 +430,9 @@ namespace RosticeriaCardelV2.Formularios
 
                 // Si el producto no está en el carrito, añadirlo
                 decimal subtotal = cantidad * precio;
-                dgvCart.Rows.Add(idProducto, nombre, precio, cantidad, subtotal);
+
+                // Añadir la fila con idVariacion como null o un valor predeterminado
+                dgvCart.Rows.Add(idProducto, idVariacion ?? 0, nombre, precio, cantidad, subtotal);
                 UpdateTotalSale();
             }
             else
@@ -438,6 +440,7 @@ namespace RosticeriaCardelV2.Formularios
                 MessageBox.Show("El producto seleccionado no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void UpdateTotalSale()
         {
@@ -574,12 +577,28 @@ namespace RosticeriaCardelV2.Formularios
 
                                         // Obtener información del producto a partir del IdProducto
                                         Producto producto = _productoRepository.GetProductoById(detalle.IdProducto);
-                                        VariacionProducto  variacionProducto = _variacionProductoRepository.GetVariacionById(detalle.IdVariacionProducto);
+                                        VariacionProducto variacionProducto = null;
+
+                                        // Si IdVariacionProducto es mayor que 0, intenta obtener la variación
+                                        if (detalle.IdVariacionProducto > 0)
+                                        {
+                                            variacionProducto = _variacionProductoRepository.GetVariacionById(detalle.IdVariacionProducto);
+                                        }
 
                                         if (producto != null)
                                         {
                                             nombresProductos.Add(producto.Nombre);
-                                            variacionesProductos.Add(variacionProducto.NombreVariacion);
+
+                                            // Si hay una variación, la añadimos, de lo contrario dejamos en blanco
+                                            if (variacionProducto != null)
+                                            {
+                                                variacionesProductos.Add(variacionProducto.NombreVariacion);
+                                            }
+                                            else
+                                            {
+                                                variacionesProductos.Add("Sin variación"); // O puedes dejarlo como string vacío ""
+                                            }
+
                                             cantidades.Add(detalle.Cantidad);
                                             precios.Add(producto.Precio);
                                             subtotales.Add(detalle.Subtotal);
@@ -594,6 +613,7 @@ namespace RosticeriaCardelV2.Formularios
                                         {
                                             MessageBox.Show($"Producto con ID {detalle.IdProducto} no encontrado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                         }
+
                                     }
                                     catch (Exception ex)
                                     {
@@ -920,7 +940,7 @@ namespace RosticeriaCardelV2.Formularios
 
             foreach (var product in products)
             {
-                if (product.IdProducto == 1 || product.IdProducto == 2 || product.IdProducto == 3)
+                if (product.IdProducto == 1)
                 {
                     continue;
                 }

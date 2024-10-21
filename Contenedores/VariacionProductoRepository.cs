@@ -91,7 +91,8 @@ namespace RosticeriaCardelV2.Contenedores
         {
             if (idVariacion <= 0)
             {
-                throw new ArgumentException("El ID de la variación debe ser mayor que cero.", nameof(idVariacion));
+                // Si IdVariacion es 0 o negativo, devolver null en lugar de lanzar excepción
+                return null;
             }
 
             try
@@ -127,6 +128,7 @@ namespace RosticeriaCardelV2.Contenedores
 
             return null;
         }
+
 
         // Actualizar una variación
         public void UpdateVariacion(VariacionProducto variacion)
