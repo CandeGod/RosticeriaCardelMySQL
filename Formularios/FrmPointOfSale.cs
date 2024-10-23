@@ -596,7 +596,7 @@ namespace RosticeriaCardelV2.Formularios
                                             }
                                             else
                                             {
-                                                variacionesProductos.Add("Sin variación"); // O puedes dejarlo como string vacío ""
+                                                variacionesProductos.Add(""); // O puedes dejarlo como string vacío ""
                                             }
 
                                             cantidades.Add(detalle.Cantidad);
@@ -791,7 +791,7 @@ namespace RosticeriaCardelV2.Formularios
                     {
                         string producto = productos[i];
                         string variacion = variaciones[i];
-                        string descripcion = $"{producto} - {variacion}";
+                        string descripcion = $"{producto} {variacion}";
                         string cantidad = cantidades[i].ToString().PadLeft(3);
                         string subtotal = subtotales[i].ToString("C2").PadLeft(subtotalWidth);
 
