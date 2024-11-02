@@ -15,6 +15,7 @@ namespace RosticeriaCardelV2.Clases
         public bool Activo { get; set; }
         public List<VariacionProducto> Variaciones { get; set; }
 
+        public byte[] Imagen { get; set; }
         public Producto()
         {
             Activo = true;
@@ -30,6 +31,17 @@ namespace RosticeriaCardelV2.Clases
             Stock = stock;
             Activo = activo;
             Variaciones = new List<VariacionProducto>();
+        }
+
+        public Producto(int idProducto, string nombre, decimal precio, decimal stock, bool activo, byte[] imagen)
+        {
+            IdProducto = idProducto;
+            Nombre = nombre;
+            Precio = precio;
+            Stock = stock;
+            Activo = activo;
+            Variaciones = new List<VariacionProducto>();
+            Imagen = imagen;
         }
 
         

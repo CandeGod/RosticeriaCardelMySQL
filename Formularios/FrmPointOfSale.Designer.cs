@@ -654,6 +654,7 @@
             // 
             // flpComplements
             // 
+            flpComplements.AutoScroll = true;
             flpComplements.Location = new Point(729, 159);
             flpComplements.Name = "flpComplements";
             flpComplements.Size = new Size(567, 412);

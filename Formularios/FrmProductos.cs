@@ -73,7 +73,8 @@ namespace RosticeriaCardelV2.Formularios
                             Nombre = txtNombreProducto.Text,
                             Precio = decimal.Parse(txtPrecio.Text),
                             Stock = decimal.Parse(txtStock.Text),
-                            Activo = chkActivo.Checked // Usar el CheckBox para el estado activo
+                            Activo = chkActivo.Checked,
+                            Imagen = pbImageProducto.Image != null ? ConvertImageToByteArray(pbImageProducto.Image) : null 
                         };
 
                         _productoRepository.AddProducto(p);
@@ -111,7 +112,8 @@ namespace RosticeriaCardelV2.Formularios
                             Nombre = txtNombreProducto.Text,
                             Precio = decimal.Parse(txtPrecio.Text),
                             Stock = decimal.Parse(txtStock.Text),
-                            Activo = chkActivo.Checked // Usar el CheckBox para el estado activo
+                            Activo = chkActivo.Checked,
+                            Imagen = pbImageProducto.Image != null ? ConvertImageToByteArray(pbImageProducto.Image) : null
                         };
 
                         _productoRepository.UpdateProducto(p);
@@ -181,7 +183,7 @@ namespace RosticeriaCardelV2.Formularios
                     txtNombreProducto.Text = row.Cells[1].Value?.ToString();
                     txtPrecio.Text = row.Cells[2].Value?.ToString();
                     txtStock.Text = row.Cells[3].Value?.ToString();
-                    chkActivo.Checked = (bool)row.Cells[4].Value; // Obtener el estado activo del producto
+                    chkActivo.Checked = (bool)row.Cells[4].Value; 
 
                     btnAdd.Enabled = false;
                     btnEdit.Enabled = true;
@@ -298,6 +300,60 @@ namespace RosticeriaCardelV2.Formularios
             FrmAgregarVariacion frm = new FrmAgregarVariacion();
             frm.ShowDialog();
             this.Show();
+        }
+
+        private void btnCargarImagen_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                Producto p = new Producto();
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+                openFileDialog.Title = "Seleccionar imagen del producto";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Intenta cargar la imagen
+                        string imagePath = openFileDialog.FileName;
+
+                        // Verifica que el archivo exista y que la ruta sea válida
+                        if (File.Exists(imagePath))
+                        {
+                            // Cargar la imagen en un PictureBox o en la propiedad del producto
+                            p.Imagen = ImageToByteArray(new Bitmap(imagePath));
+                            pbImageProducto.Image = new Bitmap(imagePath); // muestra la imagen en un PictureBox
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró el archivo especificado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al cargar la imagen: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private byte[] ImageToByteArray(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, image.RawFormat);
+                return ms.ToArray();
+            }
+        }
+
+
+        private byte[] ConvertImageToByteArray(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+            }
         }
     }
 }

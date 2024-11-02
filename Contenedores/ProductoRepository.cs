@@ -26,14 +26,14 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    string query = "INSERT INTO Productos (Nombre, Precio, Stock, Activo) VALUES (@Nombre, @Precio, @Stock, @Activo)";
+                    string query = "INSERT INTO Productos (Nombre, Precio, Stock, Activo, Imagen) VALUES (@Nombre, @Precio, @Stock, @Activo, @Imagen)";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
                         command.Parameters.AddWithValue("@Activo", producto.Activo);
-
+                        command.Parameters.AddWithValue("@Imagen", producto.Imagen);
                         //connection.Open();
                         command.ExecuteNonQuery();
                     }
@@ -72,8 +72,8 @@ namespace RosticeriaCardelV2.Contenedores
                                     Nombre = reader["Nombre"] != DBNull.Value ? reader["Nombre"].ToString() : string.Empty,
                                     Precio = reader["Precio"] != DBNull.Value ? Convert.ToDecimal(reader["Precio"]) : 0m,
                                     Stock = reader["Stock"] != DBNull.Value ? Convert.ToDecimal(reader["Stock"]) : 0,
-                                    Activo = reader["Activo"] != DBNull.Value ? Convert.ToBoolean(reader["Activo"]) : false // Leer el campo Activo
-
+                                    Activo = reader["Activo"] != DBNull.Value ? Convert.ToBoolean(reader["Activo"]) : false,
+                                    Imagen = reader["Imagen"] != DBNull.Value ? (byte[])reader["Imagen"] : null // Cargar la imagen
                                 };
                                 productos.Add(producto);
                             }
@@ -139,16 +139,27 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    string query = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock, Activo = @Activo WHERE IdProducto = @IdProducto"; // Incluir Activo en la consulta
+                    string query = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock, Activo = @Activo, Imagen = @Imagen WHERE IdProducto = @IdProducto";
+
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
-                        command.Parameters.AddWithValue("@Activo", producto.Activo); 
+                        command.Parameters.AddWithValue("@Activo", producto.Activo);
                         command.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
 
-                        //connection.Open();
+                        // Convertir la imagen a un arreglo de bytes si no es nula
+                        if (producto.Imagen != null)
+                        {
+                            command.Parameters.AddWithValue("@Imagen", producto.Imagen);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("@Imagen", DBNull.Value); // Si no hay imagen, almacena NULL en la base de datos
+                        }
+
+                        
                         command.ExecuteNonQuery();
                     }
                 }
@@ -162,6 +173,7 @@ namespace RosticeriaCardelV2.Contenedores
                 }
             }
         }
+
 
         // Eliminar un producto
         public void DeleteProducto(int id)

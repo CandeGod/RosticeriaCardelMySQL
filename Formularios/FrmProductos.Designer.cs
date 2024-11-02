@@ -61,9 +61,13 @@
             label2 = new Label();
             chkActivo = new CheckBox();
             btnVariacion = new Guna.UI2.WinForms.Guna2Button();
+            label1 = new Label();
+            pbImageProducto = new PictureBox();
+            btnCargarImagen = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbImageProducto).BeginInit();
             SuspendLayout();
             // 
             // dgvProductos
@@ -243,7 +247,7 @@
             // txtIdProducto
             // 
             txtIdProducto.Enabled = false;
-            txtIdProducto.Location = new Point(346, 288);
+            txtIdProducto.Location = new Point(89, 295);
             txtIdProducto.Margin = new Padding(3, 4, 3, 4);
             txtIdProducto.Name = "txtIdProducto";
             txtIdProducto.Size = new Size(179, 27);
@@ -254,7 +258,7 @@
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label5.ImeMode = ImeMode.NoControl;
-            label5.Location = new Point(346, 221);
+            label5.Location = new Point(89, 228);
             label5.Name = "label5";
             label5.Size = new Size(179, 31);
             label5.TabIndex = 60;
@@ -262,7 +266,7 @@
             // 
             // txtStock
             // 
-            txtStock.Location = new Point(1451, 288);
+            txtStock.Location = new Point(1194, 295);
             txtStock.Margin = new Padding(3, 4, 3, 4);
             txtStock.Name = "txtStock";
             txtStock.Size = new Size(139, 27);
@@ -274,7 +278,7 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label4.ImeMode = ImeMode.NoControl;
-            label4.Location = new Point(1478, 221);
+            label4.Location = new Point(1221, 228);
             label4.Name = "label4";
             label4.Size = new Size(73, 31);
             label4.TabIndex = 58;
@@ -282,7 +286,7 @@
             // 
             // txtPrecio
             // 
-            txtPrecio.Location = new Point(1091, 288);
+            txtPrecio.Location = new Point(834, 295);
             txtPrecio.Margin = new Padding(3, 4, 3, 4);
             txtPrecio.Name = "txtPrecio";
             txtPrecio.Size = new Size(171, 27);
@@ -294,7 +298,7 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label3.ImeMode = ImeMode.NoControl;
-            label3.Location = new Point(1135, 221);
+            label3.Location = new Point(878, 228);
             label3.Name = "label3";
             label3.Size = new Size(81, 31);
             label3.TabIndex = 56;
@@ -302,7 +306,7 @@
             // 
             // txtNombreProducto
             // 
-            txtNombreProducto.Location = new Point(686, 288);
+            txtNombreProducto.Location = new Point(429, 295);
             txtNombreProducto.Margin = new Padding(3, 4, 3, 4);
             txtNombreProducto.Name = "txtNombreProducto";
             txtNombreProducto.Size = new Size(246, 27);
@@ -313,7 +317,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
             label2.ImeMode = ImeMode.NoControl;
-            label2.Location = new Point(686, 221);
+            label2.Location = new Point(429, 228);
             label2.Name = "label2";
             label2.Size = new Size(246, 31);
             label2.TabIndex = 54;
@@ -322,9 +326,10 @@
             // chkActivo
             // 
             chkActivo.AutoSize = true;
-            chkActivo.Location = new Point(1245, 405);
+            chkActivo.Font = new Font("Segoe UI", 22.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            chkActivo.Location = new Point(1705, 258);
             chkActivo.Name = "chkActivo";
-            chkActivo.Size = new Size(73, 24);
+            chkActivo.Size = new Size(147, 54);
             chkActivo.TabIndex = 66;
             chkActivo.Text = "Activo";
             chkActivo.UseVisualStyleBackColor = true;
@@ -354,11 +359,45 @@
             btnVariacion.TextOffset = new Point(-20, 0);
             btnVariacion.Click += btnVariacion_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            label1.ImeMode = ImeMode.NoControl;
+            label1.Location = new Point(1505, 228);
+            label1.Name = "label1";
+            label1.Size = new Size(94, 31);
+            label1.TabIndex = 68;
+            label1.Text = "Imagen";
+            // 
+            // pbImageProducto
+            // 
+            pbImageProducto.BorderStyle = BorderStyle.Fixed3D;
+            pbImageProducto.Location = new Point(1492, 262);
+            pbImageProducto.Name = "pbImageProducto";
+            pbImageProducto.Size = new Size(125, 62);
+            pbImageProducto.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbImageProducto.TabIndex = 69;
+            pbImageProducto.TabStop = false;
+            // 
+            // btnCargarImagen
+            // 
+            btnCargarImagen.Location = new Point(1492, 339);
+            btnCargarImagen.Name = "btnCargarImagen";
+            btnCargarImagen.Size = new Size(117, 29);
+            btnCargarImagen.TabIndex = 70;
+            btnCargarImagen.Text = "Cargar imagen";
+            btnCargarImagen.UseVisualStyleBackColor = true;
+            btnCargarImagen.Click += btnCargarImagen_Click;
+            // 
             // FrmProductos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(btnCargarImagen);
+            Controls.Add(pbImageProducto);
+            Controls.Add(label1);
             Controls.Add(btnVariacion);
             Controls.Add(chkActivo);
             Controls.Add(btnNew);
@@ -384,6 +423,7 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbImageProducto).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -409,5 +449,8 @@
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
         private CheckBox chkActivo;
         private Guna.UI2.WinForms.Guna2Button btnVariacion;
+        private Label label1;
+        private PictureBox pbImageProducto;
+        private Button btnCargarImagen;
     }
 }

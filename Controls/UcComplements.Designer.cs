@@ -28,22 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             btnIncreaseProduct = new Guna.UI2.WinForms.Guna2Button();
             btnDecreaseProduct = new Guna.UI2.WinForms.Guna2Button();
             lblNameOfProduct = new Label();
             lblAmount = new Label();
             lblPrice = new Label();
+            pbImage = new PictureBox();
             lblStock = new Label();
+            lblTotal = new Label();
+            ((System.ComponentModel.ISupportInitialize)pbImage).BeginInit();
             SuspendLayout();
             // 
             // btnIncreaseProduct
             // 
             btnIncreaseProduct.BorderRadius = 20;
-            btnIncreaseProduct.CustomizableEdges = customizableEdges5;
+            btnIncreaseProduct.CustomizableEdges = customizableEdges1;
             btnIncreaseProduct.DisabledState.BorderColor = Color.DarkGray;
             btnIncreaseProduct.DisabledState.CustomBorderColor = Color.DarkGray;
             btnIncreaseProduct.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -51,9 +54,9 @@
             btnIncreaseProduct.FillColor = Color.Green;
             btnIncreaseProduct.Font = new Font("Segoe UI", 9F);
             btnIncreaseProduct.ForeColor = Color.White;
-            btnIncreaseProduct.Location = new Point(79, 165);
+            btnIncreaseProduct.Location = new Point(86, 169);
             btnIncreaseProduct.Name = "btnIncreaseProduct";
-            btnIncreaseProduct.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnIncreaseProduct.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnIncreaseProduct.Size = new Size(49, 49);
             btnIncreaseProduct.TabIndex = 20;
             btnIncreaseProduct.Text = "➕";
@@ -62,7 +65,7 @@
             // btnDecreaseProduct
             // 
             btnDecreaseProduct.BorderRadius = 20;
-            btnDecreaseProduct.CustomizableEdges = customizableEdges7;
+            btnDecreaseProduct.CustomizableEdges = customizableEdges3;
             btnDecreaseProduct.DisabledState.BorderColor = Color.DarkGray;
             btnDecreaseProduct.DisabledState.CustomBorderColor = Color.DarkGray;
             btnDecreaseProduct.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -70,9 +73,9 @@
             btnDecreaseProduct.FillColor = Color.FromArgb(192, 0, 0);
             btnDecreaseProduct.Font = new Font("Segoe UI", 9F);
             btnDecreaseProduct.ForeColor = Color.White;
-            btnDecreaseProduct.Location = new Point(12, 165);
+            btnDecreaseProduct.Location = new Point(2, 169);
             btnDecreaseProduct.Name = "btnDecreaseProduct";
-            btnDecreaseProduct.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnDecreaseProduct.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnDecreaseProduct.Size = new Size(49, 49);
             btnDecreaseProduct.TabIndex = 21;
             btnDecreaseProduct.Text = "➖";
@@ -82,7 +85,7 @@
             // 
             lblNameOfProduct.AutoSize = true;
             lblNameOfProduct.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            lblNameOfProduct.Location = new Point(12, 34);
+            lblNameOfProduct.Location = new Point(4, 112);
             lblNameOfProduct.Name = "lblNameOfProduct";
             lblNameOfProduct.Size = new Size(102, 31);
             lblNameOfProduct.TabIndex = 19;
@@ -92,21 +95,30 @@
             // 
             lblAmount.AutoSize = true;
             lblAmount.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            lblAmount.Location = new Point(12, 122);
+            lblAmount.Location = new Point(53, 178);
             lblAmount.Name = "lblAmount";
-            lblAmount.Size = new Size(135, 31);
+            lblAmount.Size = new Size(27, 31);
             lblAmount.TabIndex = 18;
-            lblAmount.Text = "Cantidad: 0";
+            lblAmount.Text = "0";
             // 
             // lblPrice
             // 
             lblPrice.AutoSize = true;
-            lblPrice.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            lblPrice.Location = new Point(12, 81);
+            lblPrice.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPrice.Location = new Point(126, 146);
             lblPrice.Name = "lblPrice";
-            lblPrice.Size = new Size(87, 31);
+            lblPrice.Size = new Size(56, 20);
             lblPrice.TabIndex = 22;
             lblPrice.Text = "Precio:";
+            // 
+            // pbImage
+            // 
+            pbImage.Location = new Point(-1, 0);
+            pbImage.Name = "pbImage";
+            pbImage.Size = new Size(199, 109);
+            pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbImage.TabIndex = 24;
+            pbImage.TabStop = false;
             // 
             // lblStock
             // 
@@ -117,12 +129,26 @@
             lblStock.Size = new Size(52, 20);
             lblStock.TabIndex = 23;
             lblStock.Text = "Stock:";
+            lblStock.Visible = false;
+            // 
+            // lblTotal
+            // 
+            lblTotal.AutoSize = true;
+            lblTotal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotal.Location = new Point(139, 187);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(49, 20);
+            lblTotal.TabIndex = 25;
+            lblTotal.Text = "$0.00";
             // 
             // UcComplements
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(247, 203, 20);
+            BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(lblTotal);
+            Controls.Add(pbImage);
             Controls.Add(lblStock);
             Controls.Add(lblPrice);
             Controls.Add(btnIncreaseProduct);
@@ -130,7 +156,8 @@
             Controls.Add(lblNameOfProduct);
             Controls.Add(lblAmount);
             Name = "UcComplements";
-            Size = new Size(182, 225);
+            Size = new Size(198, 231);
+            ((System.ComponentModel.ISupportInitialize)pbImage).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -142,6 +169,8 @@
         private Label lblNameOfProduct;
         private Label lblAmount;
         private Label lblPrice;
+        private PictureBox pbImage;
         private Label lblStock;
+        private Label lblTotal;
     }
 }
