@@ -225,5 +225,36 @@ namespace RosticeriaCardelV2.Contenedores
                 return stockDisponible >= cantidadSolicitada;
             }
         }
+
+        public byte[] GetImagenById(int idProducto)
+        {
+            byte[] imagen = null;
+
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    string query = "SELECT Imagen FROM Productos WHERE IdProducto = @IdProducto";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@IdProducto", idProducto);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read() && reader["Imagen"] != DBNull.Value)
+                            {
+                                imagen = (byte[])reader["Imagen"];
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener la imagen del producto: {ex.Message}");
+            }
+
+            return imagen;
+        }
+
     }
 }

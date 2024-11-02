@@ -32,6 +32,7 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcComplements));
             btnIncreaseProduct = new Guna.UI2.WinForms.Guna2Button();
             btnDecreaseProduct = new Guna.UI2.WinForms.Guna2Button();
             lblNameOfProduct = new Label();
@@ -113,6 +114,8 @@
             // 
             // pbImage
             // 
+            pbImage.BackgroundImage = (Image)resources.GetObject("pbImage.BackgroundImage");
+            pbImage.BackgroundImageLayout = ImageLayout.Stretch;
             pbImage.Location = new Point(-1, 0);
             pbImage.Name = "pbImage";
             pbImage.Size = new Size(199, 109);

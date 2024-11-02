@@ -64,6 +64,7 @@
             label1 = new Label();
             pbImageProducto = new PictureBox();
             btnCargarImagen = new Button();
+            btnDeleteImage = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)guna2CirclePictureBox1).BeginInit();
@@ -390,11 +391,22 @@
             btnCargarImagen.UseVisualStyleBackColor = true;
             btnCargarImagen.Click += btnCargarImagen_Click;
             // 
+            // btnDeleteImage
+            // 
+            btnDeleteImage.Location = new Point(1631, 223);
+            btnDeleteImage.Name = "btnDeleteImage";
+            btnDeleteImage.Size = new Size(117, 29);
+            btnDeleteImage.TabIndex = 71;
+            btnDeleteImage.Text = "Quitar imagen";
+            btnDeleteImage.UseVisualStyleBackColor = true;
+            btnDeleteImage.Click += btnDeleteImage_Click;
+            // 
             // FrmProductos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(btnDeleteImage);
             Controls.Add(btnCargarImagen);
             Controls.Add(pbImageProducto);
             Controls.Add(label1);
@@ -452,5 +464,6 @@
         private Label label1;
         private PictureBox pbImageProducto;
         private Button btnCargarImagen;
+        private Button btnDeleteImage;
     }
 }

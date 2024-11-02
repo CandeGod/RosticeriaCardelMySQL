@@ -24,6 +24,7 @@ namespace RosticeriaCardelV2.Formularios
 
             txtPrecio.KeyPress += txtPrecio_KeyPress;
             btnEdit.Enabled = false;
+            btnDeleteImage.Enabled = false;
         }
 
         private void FrmProductos_Load(object sender, EventArgs e)
@@ -74,7 +75,7 @@ namespace RosticeriaCardelV2.Formularios
                             Precio = decimal.Parse(txtPrecio.Text),
                             Stock = decimal.Parse(txtStock.Text),
                             Activo = chkActivo.Checked,
-                            Imagen = pbImageProducto.Image != null ? ConvertImageToByteArray(pbImageProducto.Image) : null 
+                            Imagen = pbImageProducto.Image != null ? ConvertImageToByteArray(pbImageProducto.Image) : null
                         };
 
                         _productoRepository.AddProducto(p);
@@ -123,6 +124,7 @@ namespace RosticeriaCardelV2.Formularios
                         MessageBox.Show("Producto actualizado con éxito.", "Operación exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         btnAdd.Enabled = true;
                         btnEdit.Enabled = false;
+                        btnDeleteImage.Enabled = false;
                     }
                     catch (Exception ex)
                     {
@@ -156,6 +158,7 @@ namespace RosticeriaCardelV2.Formularios
                         limpiar();
                         btnAdd.Enabled = true;
                         btnEdit.Enabled = false;
+                        btnDeleteImage.Enabled = false;
                     }
                     catch (Exception ex)
                     {
@@ -170,6 +173,7 @@ namespace RosticeriaCardelV2.Formularios
             limpiar();
             btnAdd.Enabled = true;
             btnEdit.Enabled = false;
+            btnDeleteImage.Enabled = false;
         }
 
         private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -179,12 +183,30 @@ namespace RosticeriaCardelV2.Formularios
                 if (e.RowIndex >= 0)
                 {
                     DataGridViewRow row = dgvProductos.Rows[e.RowIndex];
-                    txtIdProducto.Text = row.Cells[0].Value?.ToString();
-                    txtNombreProducto.Text = row.Cells[1].Value?.ToString();
-                    txtPrecio.Text = row.Cells[2].Value?.ToString();
-                    txtStock.Text = row.Cells[3].Value?.ToString();
-                    chkActivo.Checked = (bool)row.Cells[4].Value; 
+                    txtIdProducto.Text = row.Cells["IdProducto"].Value?.ToString();
+                    txtNombreProducto.Text = row.Cells["Nombre"].Value?.ToString();
+                    txtPrecio.Text = row.Cells["Precio"].Value?.ToString();
+                    txtStock.Text = row.Cells["Stock"].Value?.ToString();
+                    chkActivo.Checked = (bool)row.Cells["Activo"].Value;
 
+                    // Obtener el ID del producto seleccionado
+                    int idProducto = Convert.ToInt32(row.Cells["IdProducto"].Value);
+
+                    // Cargar la imagen desde el repositorio
+                    byte[] imagenBytes = _productoRepository.GetImagenById(idProducto);
+                    if (imagenBytes != null)
+                    {
+                        using (MemoryStream ms = new MemoryStream(imagenBytes))
+                        {
+                            pbImageProducto.Image = Image.FromStream(ms);
+                        }
+                    }
+                    else
+                    {
+                        pbImageProducto.Image = null; // Limpiar el PictureBox si no hay imagen
+                    }
+
+                    btnDeleteImage.Enabled = true;
                     btnAdd.Enabled = false;
                     btnEdit.Enabled = true;
                 }
@@ -195,6 +217,7 @@ namespace RosticeriaCardelV2.Formularios
             }
         }
 
+
         private void limpiar()
         {
             txtIdProducto.Clear();
@@ -203,6 +226,7 @@ namespace RosticeriaCardelV2.Formularios
             txtStock.Clear();
             chkActivo.Checked = false; // Reiniciar el CheckBox
             txtNombreProducto.Focus();
+            pbImageProducto.Image = null;
         }
 
         private void txtPrecio_KeyPress(object sender, KeyPressEventArgs e)
@@ -354,6 +378,11 @@ namespace RosticeriaCardelV2.Formularios
                 image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 return ms.ToArray();
             }
+        }
+
+        private void btnDeleteImage_Click(object sender, EventArgs e)
+        {
+            pbImageProducto.Image = null;
         }
     }
 }
