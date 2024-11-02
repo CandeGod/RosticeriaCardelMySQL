@@ -755,7 +755,6 @@ namespace RosticeriaCardelV2.Formularios
                 System.Drawing.Printing.PrintDocument printDoc = new System.Drawing.Printing.PrintDocument();
                 printDoc.PrintPage += (s, ev) =>
                 {
-
                     // Cargar la imagen (asegúrate de que la ruta es correcta)
                     Image logo = Image.FromFile(@"C:\Users\cande\Downloads\RosticeríaSabrosonPNG (3).png"); // Reemplaza con la ruta de tu imagen
 
@@ -774,8 +773,6 @@ namespace RosticeriaCardelV2.Formularios
                     float leftMargin = 10;
 
                     // Dibuja el contenido del ticket
-                    /*ev.Graphics.DrawString(new string('=', 42), regularFont, Brushes.Black, new PointF(leftMargin, yPos));
-                    yPos += regularFont.GetHeight(ev.Graphics);*/
                     ev.Graphics.DrawString("      Rosticería el sabrosón", boldFont, Brushes.Black, new PointF(leftMargin, yPos));
                     yPos += boldFont.GetHeight(ev.Graphics);
                     ev.Graphics.DrawString("        Fecha: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), regularFont, Brushes.Black, new PointF(leftMargin, yPos));
@@ -817,8 +814,25 @@ namespace RosticeriaCardelV2.Formularios
 
                     ev.Graphics.DrawString(new string('=', 42), regularFont, Brushes.Black, new PointF(leftMargin, yPos));
                     yPos += regularFont.GetHeight(ev.Graphics);
-                    ev.Graphics.DrawString("   Gracias por su compra!", regularFont, Brushes.Black, new PointF(leftMargin, yPos));
+
+                    // Información de servicio a domicilio y contacto centrada
+                    string[] domicilioInfo = {
+                    "Servicio a domicilio por $10",
+                    "TEL: 296-119-7801",
+                    "CALLE AZUETA No.11(FLORES MAGÓN Y JOSE CARDEL)",
+                    "CD. CARDEL. VER.",
+                    "Gracias por su compra!"
+                    };
+
+                    foreach (string line in domicilioInfo)
+                    {
+                        float lineWidth = ev.Graphics.MeasureString(line, regularFont).Width;
+                        float lineXPos = (pageWidth - lineWidth) / 2; // Centrar horizontalmente
+                        ev.Graphics.DrawString(line, regularFont, Brushes.Black, new PointF(lineXPos, yPos));
+                        yPos += regularFont.GetHeight(ev.Graphics);
+                    }
                 };
+
 
                 // Establecer la impresora de tickets como impresora predeterminada
                 printDoc.PrinterSettings.PrinterName = "POS-80"; // Nombre de la impresora térmica
