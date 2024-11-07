@@ -2,11 +2,8 @@
 using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace RosticeriaCardelV2.Contenedores
 {
@@ -43,6 +40,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open();
                     string query = "SELECT * FROM Ventas";
                     MySqlCommand command = new MySqlCommand(query, connection);
                     MySqlDataAdapter da = new MySqlDataAdapter(command);
@@ -65,7 +63,7 @@ namespace RosticeriaCardelV2.Contenedores
 
             using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
-                //connection.Open();
+                connection.Open();
                 string query = "SELECT * FROM Ventas WHERE IdVenta = @IdVenta";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -96,7 +94,7 @@ namespace RosticeriaCardelV2.Contenedores
         {
             using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
-                //connection.Open();
+                connection.Open();
                 string query = "UPDATE Ventas SET Fecha = @Fecha, Total = @Total, MontoPagado = @MontoPagado, Cambio = @Cambio WHERE IdVenta = @IdVenta";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -116,7 +114,7 @@ namespace RosticeriaCardelV2.Contenedores
         {
             using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
-                //connection.Open();
+                connection.Open();
                 string query = "DELETE FROM Ventas WHERE IdVenta = @IdVenta";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -135,6 +133,7 @@ namespace RosticeriaCardelV2.Contenedores
 
             using (MySqlConnection conn = _databaseConnection.GetConnection())
             {
+                conn.Open();
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Mes", mes);
@@ -155,6 +154,7 @@ namespace RosticeriaCardelV2.Contenedores
 
             using (MySqlConnection conn = _databaseConnection.GetConnection())
             {
+                conn.Open();
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Fecha", fecha.Date); // Asegúrate de comparar solo la parte de la fecha, sin la hora
@@ -174,7 +174,7 @@ namespace RosticeriaCardelV2.Contenedores
 
             using (MySqlConnection conn = _databaseConnection.GetConnection())
             {
-
+                conn.Open();
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Mes", mes);

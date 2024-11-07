@@ -10,11 +10,9 @@ using System.Threading.Tasks;
 
 namespace RosticeriaCardelV2.Contenedores
 {
-
     public class CashCutRepository
     {
         private readonly DatabaseConnection _databaseConnection;
-
 
         public CashCutRepository()
         {
@@ -25,6 +23,7 @@ namespace RosticeriaCardelV2.Contenedores
         {
             using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
+                connection.Open(); // Abre la conexión aquí dentro del bloque using
                 try
                 {
                     string query = "INSERT INTO CorteCaja (Fecha, MontoInicial, MontoFinal) VALUES (@Fecha, @MontoInicial, @MontoFinal)";
@@ -43,11 +42,10 @@ namespace RosticeriaCardelV2.Contenedores
                 }
                 finally
                 {
-                    connection.Close(); // Asegurarse de cerrar la conexión
+                    connection.Close(); // Cierra la conexión
                 }
             }
         }
-
 
         public List<CashCut> GetCashCut()
         {
@@ -57,6 +55,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abre la conexión aquí dentro del bloque using
                     string query = "SELECT * FROM CorteCaja";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -93,6 +92,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abre la conexión aquí dentro del bloque using
                     string query = "SELECT SUM(Total) FROM Ventas WHERE DATE(Fecha) = @Fecha";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -109,7 +109,6 @@ namespace RosticeriaCardelV2.Contenedores
             return totalVentas;
         }
 
-
         public bool ThereIsCashCutForDate(DateTime fecha)
         {
             bool existe = false;
@@ -118,6 +117,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abre la conexión aquí dentro del bloque using
                     string query = "SELECT COUNT(*) FROM CorteCaja WHERE DATE(Fecha) = @Fecha";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -134,6 +134,4 @@ namespace RosticeriaCardelV2.Contenedores
             return existe;
         }
     }
-
-
 }

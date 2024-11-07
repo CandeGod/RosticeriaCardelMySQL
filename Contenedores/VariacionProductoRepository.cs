@@ -3,9 +3,6 @@ using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RosticeriaCardelV2.Contenedores
 {
@@ -24,6 +21,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
+                    connection.Open(); // Asegura que la conexión se abre aquí
                     string query = "INSERT INTO Variaciones (IdProducto, NombreVariacion, Precio, Activo) VALUES (@IdProducto, @NombreVariacion, @Precio, @Activo)";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -39,14 +37,9 @@ namespace RosticeriaCardelV2.Contenedores
                 {
                     throw new Exception("Error al agregar la variación: " + ex.Message);
                 }
-                finally
-                {
-                    connection.Close();
-                }
             }
         }
 
-        // Leer todas las variaciones de un producto
         public List<VariacionProducto> GetAllVariacionesByProductoId(int idProducto)
         {
             List<VariacionProducto> variaciones = new List<VariacionProducto>();
@@ -55,6 +48,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Asegura que la conexión se abre aquí
                     string query = "SELECT * FROM Variaciones WHERE IdProducto = @IdProducto";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -86,12 +80,10 @@ namespace RosticeriaCardelV2.Contenedores
             return variaciones;
         }
 
-        // Leer una variación por ID
         public VariacionProducto GetVariacionById(int idVariacion)
         {
             if (idVariacion <= 0)
             {
-                // Si IdVariacion es 0 o negativo, devolver null en lugar de lanzar excepción
                 return null;
             }
 
@@ -99,6 +91,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Asegura que la conexión se abre aquí
                     string query = "SELECT * FROM Variaciones WHERE IdVariacion = @IdVariacion";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -129,14 +122,13 @@ namespace RosticeriaCardelV2.Contenedores
             return null;
         }
 
-
-        // Actualizar una variación
         public void UpdateVariacion(VariacionProducto variacion)
         {
             using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
                 try
                 {
+                    connection.Open(); // Asegura que la conexión se abre aquí
                     string query = "UPDATE Variaciones SET NombreVariacion = @NombreVariacion, Precio = @Precio, Activo = @Activo WHERE IdVariacion = @IdVariacion";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -152,20 +144,16 @@ namespace RosticeriaCardelV2.Contenedores
                 {
                     throw new Exception("Error al actualizar la variación: " + ex.Message);
                 }
-                finally
-                {
-                    connection.Close();
-                }
             }
         }
 
-        // Eliminar una variación
         public void DeleteVariacion(int id)
         {
             using (MySqlConnection connection = _databaseConnection.GetConnection())
             {
                 try
                 {
+                    connection.Open(); // Asegura que la conexión se abre aquí
                     string query = "UPDATE Variaciones SET Activo = 0 WHERE IdVariacion = @IdVariacion"; // Marcar como inactiva
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
@@ -177,10 +165,6 @@ namespace RosticeriaCardelV2.Contenedores
                 {
                     throw new Exception("Error al eliminar la variación: " + ex.Message);
                 }
-                finally
-                {
-                    connection.Close();
-                }
             }
         }
 
@@ -190,7 +174,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    
+                    connection.Open(); // Asegura que la conexión se abre aquí
 
                     // Recuperar el producto de la base de datos
                     string selectQuery = "SELECT Stock FROM Productos WHERE IdProducto = @IdProducto";
@@ -225,6 +209,5 @@ namespace RosticeriaCardelV2.Contenedores
                 }
             }
         }
-
     }
 }

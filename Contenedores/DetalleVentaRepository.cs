@@ -23,6 +23,7 @@ namespace RosticeriaCardelV2.Contenedores
         {
             string query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) " +
                            "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
+
             using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
             {
                 command.Parameters.AddWithValue("@IdVenta", idVenta);
@@ -44,7 +45,6 @@ namespace RosticeriaCardelV2.Contenedores
             }
         }
 
-
         public DataTable GetSaleDetails(int idVenta)
         {
             DataTable dt = new DataTable();
@@ -53,6 +53,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abrir la conexión dentro del bloque using
                     string query = @"
                     SELECT 
                         v.IdVenta,
@@ -76,7 +77,7 @@ namespace RosticeriaCardelV2.Contenedores
                         v.IdVenta = @IdVenta
                     GROUP BY 
                         v.IdVenta, v.Fecha, v.MontoPagado, v.Cambio, p.Nombre, va.NombreVariacion, p.Precio";
-                    
+
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdVenta", idVenta);
@@ -101,6 +102,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abrir la conexión dentro del bloque using
                     string query = @"
                     SELECT 
                         p.Nombre AS Producto,
@@ -177,12 +179,13 @@ namespace RosticeriaCardelV2.Contenedores
             WHERE 
                 {condicionFecha} 
             GROUP BY 
-                p.Nombre, va.NombreVariacion"; 
+                p.Nombre, va.NombreVariacion";
 
             try
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abrir la conexión dentro del bloque using
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         MySqlDataAdapter da = new MySqlDataAdapter(command);
@@ -197,7 +200,6 @@ namespace RosticeriaCardelV2.Contenedores
 
             return dt;
         }
-
 
         public DataTable GetSalesBySpecificDate(DateTime fecha)
         {
@@ -220,12 +222,13 @@ namespace RosticeriaCardelV2.Contenedores
             WHERE 
                 DATE(v.Fecha) = @Fecha 
             GROUP BY 
-                p.Nombre, va.NombreVariacion"; 
+                p.Nombre, va.NombreVariacion";
 
             try
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abrir la conexión dentro del bloque using
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Fecha", fecha.Date);
@@ -242,7 +245,6 @@ namespace RosticeriaCardelV2.Contenedores
 
             return dt;
         }
-
 
         public DataTable GetSalesSummaryByFilterdgv(string filtro)
         {
@@ -274,6 +276,7 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
+                    connection.Open(); // Abrir la conexión dentro del bloque using
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         MySqlDataAdapter da = new MySqlDataAdapter(command);
@@ -288,6 +291,5 @@ namespace RosticeriaCardelV2.Contenedores
 
             return dt;
         }
-
     }
 }

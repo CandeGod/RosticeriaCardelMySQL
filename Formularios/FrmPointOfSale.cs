@@ -218,6 +218,7 @@ namespace RosticeriaCardelV2.Formularios
                 
                 control.Amount = 0;
                 control.UpdateAmount();
+                
             }
 
            
@@ -253,74 +254,62 @@ namespace RosticeriaCardelV2.Formularios
         }
         private void AgregarProductoAlCarrito(int idProducto, int idVariacion)
         {
-            // Obtener el producto desde el repositorio
+            // Obtener el producto y variación
             ProductoRepository productoRepository = new ProductoRepository(new DatabaseConnection());
             Producto producto = productoRepository.GetProductoById(idProducto);
 
-            // Obtener la variación desde el repositorio
             VariacionProductoRepository variacionRepository = new VariacionProductoRepository(new DatabaseConnection());
             VariacionProducto variacion = variacionRepository.GetVariacionById(idVariacion);
 
             if (producto != null && variacion != null)
             {
-                decimal cantidad = 0; // Cantidad total inicial
-                decimal precio = variacion.Precio; // Usar el precio de la variación
-                string nombre = producto.Nombre + " - " + variacion.NombreVariacion; // Nombre del producto
+                decimal cantidad = 0;
+                decimal precio = variacion.Precio;
+                string nombre = producto.Nombre + " - " + variacion.NombreVariacion;
 
-                // Obtener la cantidad del ComboBox
+                // Obtener cantidad de ComboBox (si se seleccionó algo)
                 decimal comboBoxCantidad = 0;
                 if (idProducto == 1 && cbAmountNatural.SelectedIndex != -1 && idVariacion == 1)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountNatural.SelectedItem);
                 }
-                if (idProducto == 1 && cbAmountAdobado.SelectedIndex != -1 && idVariacion ==2)
+                else if (idProducto == 2 && cbAmountAdobado.SelectedIndex != -1 && idVariacion == 2)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountAdobado.SelectedItem);
                 }
-                if (idProducto == 1 && cbAmountChiltepin.SelectedIndex != -1 && idVariacion == 3)
+                else if (idProducto == 3 && cbAmountChiltepin.SelectedIndex != -1 && idVariacion == 3)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountChiltepin.SelectedItem);
                 }
 
-                // Sumar la cantidad de los botones seleccionados
+                cantidad += comboBoxCantidad;
+
+                // Sumar la cantidad según los botones seleccionados
                 if (idProducto == 1 && idVariacion == 1) // Pollo Natural
                 {
                     if (btnHalfNatural.BackColor == Color.LightBlue) cantidad += 0.5m;
                     if (btnOneNatural.BackColor == Color.LightBlue) cantidad += 1;
                     if (btnTwoNatural.BackColor == Color.LightBlue) cantidad += 2;
                 }
-                if (idProducto == 1 && idVariacion == 2) // Pollo Adobado
+                if (idProducto == 1 && idVariacion == 2) // Pollo Natural
                 {
                     if (btnHalfAdobado.BackColor == Color.LightBlue) cantidad += 0.5m;
                     if (btnOneAdobado.BackColor == Color.LightBlue) cantidad += 1;
                     if (btnTwoAdobado.BackColor == Color.LightBlue) cantidad += 2;
                 }
-                if (idProducto == 1 && idVariacion == 3) // Pollo Chiltepin
+                if (idProducto == 1 && idVariacion == 3) // Pollo Natural
                 {
                     if (btnHalfChiltepin.BackColor == Color.LightBlue) cantidad += 0.5m;
                     if (btnOneChiltepin.BackColor == Color.LightBlue) cantidad += 1;
                     if (btnTwoChiltepin.BackColor == Color.LightBlue) cantidad += 2;
                 }
+                // Similar para otros productos...
 
-                // Sumar la cantidad del ComboBox
-                cantidad += comboBoxCantidad;
-
-                // --- AÑADIR CANTIDAD DEL USERCONTROL ---
-                // Recorre los controles en el FlowLayoutPanel y añade la cantidad del UserControl
-                foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
-                {
-                    if (control.Producto.IdProducto == idProducto && control.Amount > 0)
-                    {
-                        cantidad += control.Amount; // Sumar la cantidad del UserControl
-                        break; // Salir del bucle una vez encontrado
-                    }
-                }
-
-                // Asegurarse de que la cantidad sea mayor que 0 antes de agregar al carrito
+                // Validar que la cantidad sea mayor que 0
                 if (cantidad <= 0)
                 {
-                    MessageBox.Show("La cantidad debe ser mayor que 0 para agregar al carrito.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; // Salir del método si la cantidad es 0
+                    MessageBox.Show("La cantidad debe ser mayor que 0.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
                 // Verificar si el producto ya está en el carrito
@@ -328,10 +317,8 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     if (Convert.ToInt32(row.Cells["idProducto"].Value) == idProducto && Convert.ToInt32(row.Cells["idVariacion"].Value) == idVariacion)
                     {
-                        // Actualizar cantidad y subtotal si el producto ya existe
                         decimal existingQuantity = Convert.ToDecimal(row.Cells["Cantidad"].Value);
                         decimal existingSubtotal = Convert.ToDecimal(row.Cells["SubTotal"].Value);
-
                         row.Cells["Cantidad"].Value = existingQuantity + cantidad;
                         row.Cells["SubTotal"].Value = existingSubtotal + (cantidad * precio);
                         UpdateTotalSale();
@@ -341,30 +328,28 @@ namespace RosticeriaCardelV2.Formularios
 
                 // Si el producto no está en el carrito, añadirlo
                 decimal subtotal = cantidad * precio;
-                dgvCart.Rows.Add(idProducto, idVariacion, nombre, precio, cantidad, subtotal); // Asegúrate de que idVariacion esté incluido en la fila
+                dgvCart.Rows.Add(idProducto, idVariacion, nombre, precio, cantidad, subtotal);
                 UpdateTotalSale();
             }
             else
             {
-                MessageBox.Show("El producto o variación seleccionada no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("El producto o variación no existe.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+
         private void AgregarProductoAlCarrito(int idProducto)
         {
-            // Obtener el producto desde el repositorio
             ProductoRepository productoRepository = new ProductoRepository(new DatabaseConnection());
             Producto producto = productoRepository.GetProductoById(idProducto);
 
             if (producto != null)
             {
-                // Determinar la cantidad seleccionada
                 decimal cantidad = 0;
                 decimal precio = producto.Precio;
                 string nombre = producto.Nombre;
-                int? idVariacion = null; // No hay variación
 
-                // Obtener la cantidad del ComboBox, si está seleccionado
+                // Obtener la cantidad seleccionada desde los ComboBoxes si aplica
                 decimal comboBoxCantidad = 0;
                 if (idProducto == 1 && cbAmountNatural.SelectedIndex != -1)
                 {
@@ -379,37 +364,22 @@ namespace RosticeriaCardelV2.Formularios
                     comboBoxCantidad = Convert.ToDecimal(cbAmountChiltepin.SelectedItem);
                 }
 
-                // Combinar cantidad del ComboBox con las selecciones de botones
-                if (idProducto == 1) // Pollo Natural
-                {
-                    if (btnHalfNatural.BackColor == Color.LightBlue) cantidad += 0.5m;
-                    if (btnOneNatural.BackColor == Color.LightBlue) cantidad += 1;
-                    if (btnTwoNatural.BackColor == Color.LightBlue) cantidad += 2;
-                    cantidad += comboBoxCantidad; // Sumar la cantidad del ComboBox
-                }
-                else if (idProducto == 2) // Pollo Adobado
-                {
-                    if (btnHalfAdobado.BackColor == Color.LightBlue) cantidad += 0.5m;
-                    if (btnOneAdobado.BackColor == Color.LightBlue) cantidad += 1;
-                    if (btnTwoAdobado.BackColor == Color.LightBlue) cantidad += 2;
-                    cantidad += comboBoxCantidad; // Sumar la cantidad del ComboBox
-                }
-                else if (idProducto == 3) // Pollo Chiltepin
-                {
-                    if (btnHalfChiltepin.BackColor == Color.LightBlue) cantidad += 0.5m;
-                    if (btnOneChiltepin.BackColor == Color.LightBlue) cantidad += 1;
-                    if (btnTwoChiltepin.BackColor == Color.LightBlue) cantidad += 2;
-                    cantidad += comboBoxCantidad; // Sumar la cantidad del ComboBox
-                }
+                cantidad += comboBoxCantidad;
 
-                // --- AÑADIR CANTIDAD DEL USERCONTROL ---
+                // Agregar la cantidad del UserControl (complementos)
                 foreach (UcComplements control in flpComplements.Controls.OfType<UcComplements>())
                 {
                     if (control.Producto.IdProducto == idProducto && control.Amount > 0)
                     {
-                        cantidad += control.Amount; // Sumar la cantidad del UserControl
+                        cantidad += control.Amount;
                         break;
                     }
+                }
+
+                if (cantidad <= 0)
+                {
+                    MessageBox.Show("La cantidad debe ser mayor que 0.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
                 // Verificar si el producto ya está en el carrito
@@ -417,10 +387,8 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     if (Convert.ToInt32(row.Cells["idProducto"].Value) == idProducto)
                     {
-                        // Actualizar cantidad y subtotal si el producto ya existe
                         decimal existingQuantity = Convert.ToDecimal(row.Cells["Cantidad"].Value);
                         decimal existingSubtotal = Convert.ToDecimal(row.Cells["SubTotal"].Value);
-
                         row.Cells["Cantidad"].Value = existingQuantity + cantidad;
                         row.Cells["SubTotal"].Value = existingSubtotal + (cantidad * precio);
                         UpdateTotalSale();
@@ -430,9 +398,7 @@ namespace RosticeriaCardelV2.Formularios
 
                 // Si el producto no está en el carrito, añadirlo
                 decimal subtotal = cantidad * precio;
-
-                // Añadir la fila con idVariacion como null o un valor predeterminado
-                dgvCart.Rows.Add(idProducto, idVariacion ?? 0, nombre, precio, cantidad, subtotal);
+                dgvCart.Rows.Add(idProducto, null, nombre, precio, cantidad, subtotal); // No se pasa idVariacion aquí
                 UpdateTotalSale();
             }
             else
@@ -503,6 +469,7 @@ namespace RosticeriaCardelV2.Formularios
                 MessageBox.Show("El carrito está vacío. Por favor, agregue productos antes de proceder con el pago.", "Carrito vacío", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             try
             {
                 decimal totalCarrito = CalcularTotalCarrito();
@@ -544,6 +511,8 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     using (MySqlConnection connection = _databaseConnection.GetConnection())
                     {
+                        connection.Open();  // Abrir la conexión aquí dentro del bloque using
+
                         using (MySqlTransaction transaction = connection.BeginTransaction())
                         {
                             try
