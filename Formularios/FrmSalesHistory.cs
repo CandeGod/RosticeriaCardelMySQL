@@ -133,7 +133,7 @@ namespace RosticeriaCardelV2.Formularios
                     resumen.AppendLine($"Total Recaudado: {totalRecaudado.ToString("C2")}");
 
                     rtxtSalesResume.Text = resumen.ToString();
-                    dgvSales.DataSource = _ventaRepository.GetSalesByMounth(mesSeleccionado);
+                    dgvSales.DataSource = _ventaRepository.GetSalesByMonth(mesSeleccionado);
                 }
                 else
                 {

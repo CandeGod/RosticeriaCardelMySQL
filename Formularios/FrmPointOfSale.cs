@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
@@ -36,6 +37,8 @@ namespace RosticeriaCardelV2.Formularios
             _productoRepository = new ProductoRepository(_databaseConnection);
             _detalleVentaRepository = new DetalleVentaRepository(_databaseConnection);
             _variacionProductoRepository = new VariacionProductoRepository(_databaseConnection);
+
+            Task.Run(() => _ventaRepository.SyncSalesToCloudAsync());
         }
 
         private void FrmPointOfSale_Load(object sender, EventArgs e)
