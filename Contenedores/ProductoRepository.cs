@@ -16,6 +16,98 @@ namespace RosticeriaCardelV2.Contenedores
             _databaseConnection = databaseConnection;
         }
 
+        // Obtener productos no sincronizados
+
+        public DataTable GetUnsyncedProducts()
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM Productos WHERE Sincronizado = 0";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    MySqlDataAdapter da = new MySqlDataAdapter(command);
+
+                    da.Fill(dt);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Error al cargar los productos no sincronizados " + ex.Message);
+            }
+
+            return dt;
+        }
+
+        // Marcar los productos como sincronizados
+
+        public void MarkProductsAsSynced(int[] productIds)
+        {
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "UPDATE Productos SET Sincronizado = 1 WHERE IdProducto IN (" + string.Join(",", productIds) + ")";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al marcar productos como sincronizadois: {ex.Message}");
+            }
+        }
+
+        // Sincronización asíncrona de productos
+        public async Task SyncProductosToCloudAsync()
+        {
+            try
+            {
+                var unsyncedSales = GetUnsyncedProducts();
+
+                if (unsyncedSales.Rows.Count == 0)
+                    return;
+
+                using (MySqlConnection cloudConnection = _databaseConnection.GetCloudConnection())
+                {
+                    await cloudConnection.OpenAsync();
+
+                    List<int> syncedIds = new List<int>();
+
+                    foreach (DataRow row in unsyncedSales.Rows)
+                    {
+                        var query = "INSERT INTO Productos (IdProducto, Nombre, Precio, Stock, Activo, Imagen) " +
+                                    "VALUES (@IdProducto, @Nombre, @Precio, @Stock, @Activo, @Imagen)";
+                        using (MySqlCommand command = new MySqlCommand(query, cloudConnection))
+                        {
+                            command.Parameters.AddWithValue("@IdProducto", row["IdProducto"]);
+                            command.Parameters.AddWithValue("@Nombre", row["Nombre"]);
+                            command.Parameters.AddWithValue("@Precio", row["Precio"]);
+                            command.Parameters.AddWithValue("@Stock", row["Stock"] == DBNull.Value ? null : row["Stock"]);
+                            command.Parameters.AddWithValue("@Activo", row["Activo"] == DBNull.Value ? null : row["Activo"]);
+                            command.Parameters.AddWithValue("@Imagen", row["Imagen"]);
+
+                            await command.ExecuteNonQueryAsync();
+                            syncedIds.Add(Convert.ToInt32(row["IdProducto"]));
+                        }
+                    }
+
+                    // Marcar las ventas como sincronizadas en la base local
+                    MarkProductsAsSynced(syncedIds.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al sincronizar productos: {ex.Message}");
+            }
+        }
+
         // Crear un nuevo producto
         public void AddProducto(Producto producto)
         {

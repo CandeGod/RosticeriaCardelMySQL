@@ -25,6 +25,7 @@ namespace RosticeriaCardelV2.Formularios
             txtPrecio.KeyPress += txtPrecio_KeyPress;
             btnEdit.Enabled = false;
             btnDeleteImage.Enabled = false;
+            Task.Run(() => _productoRepository.SyncProductosToCloudAsync());
         }
 
         private void FrmProductos_Load(object sender, EventArgs e)
