@@ -408,7 +408,7 @@
             // cbAmountChiltepin
             // 
             cbAmountChiltepin.FormattingEnabled = true;
-            cbAmountChiltepin.Items.AddRange(new object[] { "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
+            cbAmountChiltepin.Items.AddRange(new object[] { "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
             cbAmountChiltepin.Location = new Point(501, 874);
             cbAmountChiltepin.Margin = new Padding(3, 4, 3, 4);
             cbAmountChiltepin.Name = "cbAmountChiltepin";
@@ -419,7 +419,7 @@
             // cbAmountAdobado
             // 
             cbAmountAdobado.FormattingEnabled = true;
-            cbAmountAdobado.Items.AddRange(new object[] { "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
+            cbAmountAdobado.Items.AddRange(new object[] { "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" });
             cbAmountAdobado.Location = new Point(501, 580);
             cbAmountAdobado.Margin = new Padding(3, 4, 3, 4);
             cbAmountAdobado.Name = "cbAmountAdobado";

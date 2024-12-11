@@ -38,7 +38,7 @@ namespace RosticeriaCardelV2.Formularios
             _detalleVentaRepository = new DetalleVentaRepository(_databaseConnection);
             _variacionProductoRepository = new VariacionProductoRepository(_databaseConnection);
 
-            Task.Run(() => _ventaRepository.SyncSalesToCloudAsync());
+            //Task.Run(() => _ventaRepository.SyncSalesToCloudAsync());
         }
 
         private void FrmPointOfSale_Load(object sender, EventArgs e)
@@ -276,11 +276,11 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountNatural.SelectedItem);
                 }
-                else if (idProducto == 2 && cbAmountAdobado.SelectedIndex != -1 && idVariacion == 2)
+                if (idProducto == 1 && cbAmountAdobado.SelectedIndex != -1 && idVariacion == 2)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountAdobado.SelectedItem);
                 }
-                else if (idProducto == 3 && cbAmountChiltepin.SelectedIndex != -1 && idVariacion == 3)
+                if (idProducto == 1 && cbAmountChiltepin.SelectedIndex != -1 && idVariacion == 3)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountChiltepin.SelectedItem);
                 }
@@ -358,11 +358,11 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountNatural.SelectedItem);
                 }
-                else if (idProducto == 2 && cbAmountAdobado.SelectedIndex != -1)
+                if (idProducto == 2 && cbAmountAdobado.SelectedIndex != -1)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountAdobado.SelectedItem);
                 }
-                else if (idProducto == 3 && cbAmountChiltepin.SelectedIndex != -1)
+                if (idProducto == 3 && cbAmountChiltepin.SelectedIndex != -1)
                 {
                     comboBoxCantidad = Convert.ToDecimal(cbAmountChiltepin.SelectedItem);
                 }
