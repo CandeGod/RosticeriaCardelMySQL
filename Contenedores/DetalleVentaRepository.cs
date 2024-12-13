@@ -21,29 +21,43 @@ namespace RosticeriaCardelV2.Contenedores
 
         public void AddDetalleVenta(DetalleVenta detalle, int idVenta, MySqlConnection connection, MySqlTransaction transaction)
         {
-            string query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) " +
-                           "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
+            // Consulta para insertar el detalle de la venta
+            string queryInsert = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) " +
+                                 "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
 
-            using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
+            using (MySqlCommand commandInsert = new MySqlCommand(queryInsert, connection, transaction))
             {
-                command.Parameters.AddWithValue("@IdVenta", idVenta);
-                command.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
-                command.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
-                command.Parameters.AddWithValue("@Subtotal", detalle.Subtotal);
+                commandInsert.Parameters.AddWithValue("@IdVenta", idVenta);
+                commandInsert.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
+                commandInsert.Parameters.AddWithValue("@Cantidad", detalle.Cantidad);
+                commandInsert.Parameters.AddWithValue("@Subtotal", detalle.Subtotal);
 
                 // Si IdVariacionProducto es mayor que 0, lo insertamos; de lo contrario, ponemos NULL
                 if (detalle.IdVariacionProducto > 0)
                 {
-                    command.Parameters.AddWithValue("@IdVariacion", detalle.IdVariacionProducto);
+                    commandInsert.Parameters.AddWithValue("@IdVariacion", detalle.IdVariacionProducto);
                 }
                 else
                 {
-                    command.Parameters.AddWithValue("@IdVariacion", DBNull.Value); // Inserta NULL si no hay variación
+                    commandInsert.Parameters.AddWithValue("@IdVariacion", DBNull.Value); // Inserta NULL si no hay variación
                 }
 
-                command.ExecuteNonQuery();
+                // Ejecutar la inserción del detalle de venta
+                commandInsert.ExecuteNonQuery();
+            }
+
+            // Consulta para actualizar el campo 'Sincronizado' del producto asociado
+            string queryUpdate = "UPDATE Productos SET Sincronizado = 0 WHERE IdProducto = @IdProducto";
+
+            using (MySqlCommand commandUpdate = new MySqlCommand(queryUpdate, connection, transaction))
+            {
+                commandUpdate.Parameters.AddWithValue("@IdProducto", detalle.IdProducto);
+
+                // Ejecutar la actualización del campo 'Sincronizado'
+                commandUpdate.ExecuteNonQuery();
             }
         }
+
 
         public DataTable GetSaleDetails(int idVenta)
         {

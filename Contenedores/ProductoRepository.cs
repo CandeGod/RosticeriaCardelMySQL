@@ -69,9 +69,9 @@ namespace RosticeriaCardelV2.Contenedores
         {
             try
             {
-                var unsyncedSales = GetUnsyncedProducts();
+                var unsyncedProducts = GetUnsyncedProducts();
 
-                if (unsyncedSales.Rows.Count == 0)
+                if (unsyncedProducts.Rows.Count == 0)
                     return;
 
                 using (MySqlConnection cloudConnection = _databaseConnection.GetCloudConnection())
@@ -80,25 +80,56 @@ namespace RosticeriaCardelV2.Contenedores
 
                     List<int> syncedIds = new List<int>();
 
-                    foreach (DataRow row in unsyncedSales.Rows)
+                    foreach (DataRow row in unsyncedProducts.Rows)
                     {
-                        var query = "INSERT INTO Productos (IdProducto, Nombre, Precio, Stock, Activo, Imagen) " +
-                                    "VALUES (@IdProducto, @Nombre, @Precio, @Stock, @Activo, @Imagen)";
-                        using (MySqlCommand command = new MySqlCommand(query, cloudConnection))
+                        // Comprobar si el producto ya existe en la base de datos en la nube
+                        var checkQuery = "SELECT COUNT(*) FROM Productos WHERE IdProducto = @IdProducto";
+                        using (MySqlCommand checkCommand = new MySqlCommand(checkQuery, cloudConnection))
                         {
-                            command.Parameters.AddWithValue("@IdProducto", row["IdProducto"]);
-                            command.Parameters.AddWithValue("@Nombre", row["Nombre"]);
-                            command.Parameters.AddWithValue("@Precio", row["Precio"]);
-                            command.Parameters.AddWithValue("@Stock", row["Stock"] == DBNull.Value ? null : row["Stock"]);
-                            command.Parameters.AddWithValue("@Activo", row["Activo"] == DBNull.Value ? null : row["Activo"]);
-                            command.Parameters.AddWithValue("@Imagen", row["Imagen"]);
+                            checkCommand.Parameters.AddWithValue("@IdProducto", row["IdProducto"]);
+                            int exists = Convert.ToInt32(await checkCommand.ExecuteScalarAsync());
 
-                            await command.ExecuteNonQueryAsync();
-                            syncedIds.Add(Convert.ToInt32(row["IdProducto"]));
+                            if (exists > 0)
+                            {
+                                // Actualizar producto existente
+                                var updateQuery = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock, Activo = @Activo, Imagen = @Imagen " +
+                                                  "WHERE IdProducto = @IdProducto";
+                                using (MySqlCommand updateCommand = new MySqlCommand(updateQuery, cloudConnection))
+                                {
+                                    updateCommand.Parameters.AddWithValue("@IdProducto", row["IdProducto"]);
+                                    updateCommand.Parameters.AddWithValue("@Nombre", row["Nombre"]);
+                                    updateCommand.Parameters.AddWithValue("@Precio", row["Precio"]);
+                                    updateCommand.Parameters.AddWithValue("@Stock", row["Stock"] == DBNull.Value ? null : row["Stock"]);
+                                    updateCommand.Parameters.AddWithValue("@Activo", row["Activo"] == DBNull.Value ? null : row["Activo"]);
+                                    updateCommand.Parameters.AddWithValue("@Imagen", row["Imagen"]);
+
+                                    await updateCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+                            else
+                            {
+                                // Insertar nuevo producto
+                                var insertQuery = "INSERT INTO Productos (IdProducto, Nombre, Precio, Stock, Activo, Imagen) " +
+                                                  "VALUES (@IdProducto, @Nombre, @Precio, @Stock, @Activo, @Imagen)";
+                                using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, cloudConnection))
+                                {
+                                    insertCommand.Parameters.AddWithValue("@IdProducto", row["IdProducto"]);
+                                    insertCommand.Parameters.AddWithValue("@Nombre", row["Nombre"]);
+                                    insertCommand.Parameters.AddWithValue("@Precio", row["Precio"]);
+                                    insertCommand.Parameters.AddWithValue("@Stock", row["Stock"] == DBNull.Value ? null : row["Stock"]);
+                                    insertCommand.Parameters.AddWithValue("@Activo", row["Activo"] == DBNull.Value ? null : row["Activo"]);
+                                    insertCommand.Parameters.AddWithValue("@Imagen", row["Imagen"]);
+
+                                    await insertCommand.ExecuteNonQueryAsync();
+                                }
+                            }
                         }
+
+                        // Agregar el ID del producto sincronizado
+                        syncedIds.Add(Convert.ToInt32(row["IdProducto"]));
                     }
 
-                    // Marcar las ventas como sincronizadas en la base local
+                    // Marcar los productos como sincronizados en la base local
                     MarkProductsAsSynced(syncedIds.ToArray());
                 }
             }
@@ -107,6 +138,7 @@ namespace RosticeriaCardelV2.Contenedores
                 MessageBox.Show($"Error al sincronizar productos: {ex.Message}");
             }
         }
+
 
         // Crear un nuevo producto
         public void AddProducto(Producto producto)
@@ -222,16 +254,21 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 try
                 {
-                    string query = "UPDATE Productos SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock, Activo = @Activo, Imagen = @Imagen WHERE IdProducto = @IdProducto";
+                    // Consulta para actualizar los datos del producto, excluyendo el campo Sincronizado
+                    string query = "UPDATE Productos " +
+                                   "SET Nombre = @Nombre, Precio = @Precio, Stock = @Stock, Activo = @Activo, Imagen = @Imagen, Sincronizado = 0 " +
+                                   "WHERE IdProducto = @IdProducto";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
+                        // Asignar parámetros
                         command.Parameters.AddWithValue("@Nombre", producto.Nombre);
                         command.Parameters.AddWithValue("@Precio", producto.Precio);
                         command.Parameters.AddWithValue("@Stock", producto.Stock);
                         command.Parameters.AddWithValue("@Activo", producto.Activo);
                         command.Parameters.AddWithValue("@IdProducto", producto.IdProducto);
 
+                        // Manejar la imagen: si no hay imagen, insertar NULL
                         if (producto.Imagen != null)
                         {
                             command.Parameters.AddWithValue("@Imagen", producto.Imagen);
@@ -241,16 +278,19 @@ namespace RosticeriaCardelV2.Contenedores
                             command.Parameters.AddWithValue("@Imagen", DBNull.Value);
                         }
 
-                        connection.Open(); // Abrir la conexión aquí
+                        // Abrir la conexión y ejecutar la consulta
+                        connection.Open();
                         command.ExecuteNonQuery();
                     }
                 }
                 catch (Exception ex)
                 {
+                    // Manejar errores
                     throw new Exception("Error al actualizar el producto: " + ex.Message);
                 }
             }
         }
+
 
         // Eliminar un producto
         public void DeleteProducto(int id)
