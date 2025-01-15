@@ -27,7 +27,8 @@ namespace RosticeriaCardelV2
             var databaseConnection = new DatabaseConnection();
             var productoRepository = new ProductoRepository(databaseConnection);
             var ventaRepository = new VentaRepository(databaseConnection);
-            _syncService = new SyncService(productoRepository, ventaRepository);
+            var detalleVentaRepository = new DetalleVentaRepository( databaseConnection);
+            _syncService = new SyncService(productoRepository, ventaRepository, detalleVentaRepository);
 
             // Inicia el servicio de sincronización
             _syncService.Start();

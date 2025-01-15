@@ -2,6 +2,7 @@
 using System.Data;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using RosticeriaCardelV2.Clases;
 
 namespace RosticeriaCardel
 {
@@ -106,6 +107,52 @@ namespace RosticeriaCardel
                 Console.WriteLine("Error al sincronizar productos: " + ex.Message);
             }
         }
+
+        public async Task SyncDetalleVentaToCloudAsync()
+        {
+            try
+            {
+                using (var localConnection = GetConnection())
+                using (var cloudConnection = GetCloudConnection())
+                {
+                    await localConnection.OpenAsync();
+                    await cloudConnection.OpenAsync();
+
+                    // Leer detalles de ventas locales pendientes de sincronizar
+                    var queryLocal = "SELECT * FROM DetalleVenta WHERE sincronizado = 0";
+                    var commandLocal = new MySqlCommand(queryLocal, localConnection);
+                    var reader = await commandLocal.ExecuteReaderAsync();
+
+                    while (await reader.ReadAsync())
+                    {
+                        // Inserta datos en la base de datos en la nube
+                        var queryCloud = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
+                        var commandCloud = new MySqlCommand(queryCloud, cloudConnection);
+
+                        commandCloud.Parameters.AddWithValue("@IdVenta", reader["IdVenta"]);
+                        commandCloud.Parameters.AddWithValue("@IdProducto", reader["IdProducto"]);
+                        commandCloud.Parameters.AddWithValue("@IdVariacion", reader["IdVariacion"] != DBNull.Value ? reader["IdVariacion"] : (object)DBNull.Value);
+                        commandCloud.Parameters.AddWithValue("@Cantidad", reader["Cantidad"]);
+                        commandCloud.Parameters.AddWithValue("@Subtotal", reader["Subtotal"]);
+
+                        await commandCloud.ExecuteNonQueryAsync();
+
+                        // Actualiza el estado de sincronización local
+                        var updateLocal = "UPDATE DetalleVenta SET sincronizado = 1 WHERE IdDetalle = @IdDetalle";
+                        var commandUpdate = new MySqlCommand(updateLocal, localConnection);
+                        commandUpdate.Parameters.AddWithValue("@IdDetalle", reader["IdDetalle"]);
+                        await commandUpdate.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                Console.WriteLine("Error al sincronizar detalles de venta: " + ex.Message);
+            }
+        }
+
+
 
     }
 }

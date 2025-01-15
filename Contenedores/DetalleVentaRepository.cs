@@ -22,8 +22,8 @@ namespace RosticeriaCardelV2.Contenedores
         public void AddDetalleVenta(DetalleVenta detalle, int idVenta, MySqlConnection connection, MySqlTransaction transaction)
         {
             // Consulta para insertar el detalle de la venta
-            string queryInsert = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) " +
-                                 "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
+            string queryInsert = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal, Sincronizado) " +
+                                 "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal, 0)";
 
             using (MySqlCommand commandInsert = new MySqlCommand(queryInsert, connection, transaction))
             {
@@ -57,6 +57,115 @@ namespace RosticeriaCardelV2.Contenedores
                 commandUpdate.ExecuteNonQuery();
             }
         }
+
+        // Obtener detalles de ventas no sincronizados
+        public DataTable GetUnsyncedDetalleVentas()
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM DetalleVenta WHERE Sincronizado = 0";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    MySqlDataAdapter da = new MySqlDataAdapter(command);
+
+                    da.Fill(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar los detalles de venta no sincronizados: {ex.Message}");
+            }
+
+            return dt;
+        }
+
+        // Marcar detalles de ventas como sincronizados
+        public void MarkDetalleVentasAsSynced(int[] detalleVentaIds)
+        {
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "UPDATE DetalleVenta SET Sincronizado = 1 WHERE IdDetalle IN (" + string.Join(",", detalleVentaIds) + ")";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al marcar detalles de venta como sincronizados: {ex.Message}");
+            }
+        }
+
+        // Sincronización asíncrona de detalles de ventas
+        public async Task SyncDetalleVentasToCloudAsync()
+        {
+            try
+            {
+                var unsyncedDetalleVentas = GetUnsyncedDetalleVentas();
+
+                if (unsyncedDetalleVentas.Rows.Count == 0)
+                    return;
+
+                using (MySqlConnection cloudConnection = _databaseConnection.GetCloudConnection())
+                {
+                    await cloudConnection.OpenAsync();
+
+                    // Iniciar una transacción en la conexión a la nube
+                    using (var transaction = await cloudConnection.BeginTransactionAsync())
+                    {
+                        List<int> syncedIds = new List<int>();
+
+                        try
+                        {
+                            foreach (DataRow row in unsyncedDetalleVentas.Rows)
+                            {
+                                var query = "INSERT INTO DetalleVenta (IdVenta, IdProducto, IdVariacion, Cantidad, Subtotal) " +
+                                            "VALUES (@IdVenta, @IdProducto, @IdVariacion, @Cantidad, @Subtotal)";
+                                using (MySqlCommand command = new MySqlCommand(query, cloudConnection, transaction))
+                                {
+                                    command.Parameters.AddWithValue("@IdVenta", row["IdVenta"]);
+                                    command.Parameters.AddWithValue("@IdProducto", row["IdProducto"]);
+                                    command.Parameters.AddWithValue("@IdVariacion", row["IdVariacion"] != DBNull.Value ? row["IdVariacion"] : (object)DBNull.Value);
+                                    command.Parameters.AddWithValue("@Cantidad", row["Cantidad"]);
+                                    command.Parameters.AddWithValue("@Subtotal", row["Subtotal"]);
+
+                                    await command.ExecuteNonQueryAsync();
+                                    syncedIds.Add(Convert.ToInt32(row["IdDetalle"])); // Cambia a IdDetalle para la sincronización
+                                }
+                            }
+
+                            // Commit de la transacción si todo se ejecutó correctamente
+                            await transaction.CommitAsync();
+
+                            // Marcar los detalles de ventas como sincronizados en la base local
+                            MarkDetalleVentasAsSynced(syncedIds.ToArray());
+                        }
+                        catch (Exception ex)
+                        {
+                            // Si ocurre un error, hacer rollback de la transacción
+                            await transaction.RollbackAsync();
+                            MessageBox.Show($"Error al sincronizar detalles de venta: {ex.Message}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al sincronizar detalles de venta: {ex.Message}");
+            }
+        }
+
+
+
+
 
 
         public DataTable GetSaleDetails(int idVenta)
