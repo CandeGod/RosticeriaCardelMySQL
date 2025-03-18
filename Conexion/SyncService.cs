@@ -12,14 +12,16 @@ namespace RosticeriaCardelV2.Conexion
         private readonly ProductoRepository _productoRepository;
         private readonly VentaRepository _ventaRepository;
         private readonly DetalleVentaRepository _detalleVentaRepository;
+        private readonly CashCutRepository _cashCutRepository;
         private readonly int _syncIntervalMilliseconds;
         private bool _isRunning;
 
-        public SyncService(ProductoRepository productoRepository, VentaRepository ventaRepository, DetalleVentaRepository detalleVentaRepository, int syncIntervalMilliseconds = 6000)
+        public SyncService(ProductoRepository productoRepository, VentaRepository ventaRepository, DetalleVentaRepository detalleVentaRepository, CashCutRepository cashCutRepository, int syncIntervalMilliseconds = 6000)
         {
             _productoRepository = productoRepository;
             _ventaRepository = ventaRepository;
             _detalleVentaRepository = detalleVentaRepository;
+            _cashCutRepository = cashCutRepository;
             _syncIntervalMilliseconds = syncIntervalMilliseconds;
         }
 
@@ -38,6 +40,7 @@ namespace RosticeriaCardelV2.Conexion
                         await _productoRepository.SyncProductosToCloudAsync();
                         await _ventaRepository.SyncSalesToCloudAsync();
                         await _detalleVentaRepository.SyncDetalleVentasToCloudAsync();
+                        await _cashCutRepository.SyncCashCutsToCloudAsync();
                     }
                     catch (Exception ex)
                     {
