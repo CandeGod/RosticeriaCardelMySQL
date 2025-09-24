@@ -48,7 +48,7 @@ namespace RosticeriaCardelV2.Controls
         }
 
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public UcComplements()
         {
@@ -56,6 +56,7 @@ namespace RosticeriaCardelV2.Controls
             Amount = 0;
             _producto = new Producto(); // Inicializa _producto para evitar NullReferenceException
             UpdateAmount();
+            txtAmount.TextChanged += txtAmount_TextChanged;
         }
 
         private void btnIncreaseProduct_Click(object sender, EventArgs e)
@@ -79,7 +80,7 @@ namespace RosticeriaCardelV2.Controls
 
         public void UpdateAmount()
         {
-            lblAmount.Text = "" + Amount.ToString();
+            txtAmount.Text = Amount.ToString("0.##");
             if (_producto != null)
             {
                 lblStock.Text = "Stock: " + _producto.Stock.ToString();
@@ -99,6 +100,23 @@ namespace RosticeriaCardelV2.Controls
             }
         }
 
+        private void txtAmount_TextChanged(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtAmount.Text, out decimal value) && value >= 0)
+    {
+        // Ajusta el stock solo si cambia la cantidad manualmente
+        decimal diff = value - Amount;
+        _producto.Stock -= diff;
+        Amount = value;
+        UpdatePrice();
+    }
+    else
+    {
+        // Si el valor no es válido, lo deja en 0
+        Amount = 0;
+        UpdatePrice();
+    }
+        }
     }
 
 }

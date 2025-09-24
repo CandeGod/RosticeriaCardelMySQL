@@ -330,9 +330,9 @@
             chkActivo.Font = new Font("Segoe UI", 22.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             chkActivo.Location = new Point(1705, 258);
             chkActivo.Name = "chkActivo";
-            chkActivo.Size = new Size(147, 54);
+            chkActivo.Size = new Size(181, 54);
             chkActivo.TabIndex = 66;
-            chkActivo.Text = "Activo";
+            chkActivo.Text = "¿Activo?";
             chkActivo.UseVisualStyleBackColor = true;
             // 
             // btnVariacion
@@ -358,6 +358,7 @@
             btnVariacion.TabIndex = 67;
             btnVariacion.Text = "Agregar";
             btnVariacion.TextOffset = new Point(-20, 0);
+            btnVariacion.Visible = false;
             btnVariacion.Click += btnVariacion_Click;
             // 
             // label1

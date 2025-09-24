@@ -728,20 +728,26 @@ namespace RosticeriaCardelV2.Formularios
                 printDoc.PrintPage += (s, ev) =>
                 {
                     // Cargar la imagen (asegúrate de que la ruta es correcta)
-                    Image logo = Image.FromFile(@"C:\Users\cande\Downloads\RosticeríaSabrosonPNG (3).png"); // Reemplaza con la ruta de tu imagen
+                    Image logo = Image.FromFile(@"C:\Tec\Trabajos\Archivos de la rosticeriaCardel\Imagenes\RosticeríaSabrosonPNG.ico"); // Reemplaza con la ruta de tu imagen
 
                     // Calcular la posición para centrar la imagen
                     float imageWidth = logo.Width;
                     float pageWidth = ev.PageBounds.Width;
-                    float xPos = (pageWidth - imageWidth) / 2; // Centrar horizontalmente
 
                     // Dibujar la imagen
-                    ev.Graphics.DrawImage(logo, (xPos + 20), 0); // Ajusta el margen superior aquí si es necesario
+                    // Define el tamaño deseado para la imagen (por ejemplo, 80x80 píxeles)
+                    int logoWidth = 130;
+                    int logoHeight = 130;
 
+                    // Calcula la posición centrada con el nuevo tamaño
+                    float xPos = (pageWidth - logoWidth) / 2;
+
+                    // Dibuja la imagen redimensionada
+                    ev.Graphics.DrawImage(logo, xPos, 0, logoWidth, logoHeight);
                     // Definir la fuente y el formato para el texto
                     Font regularFont = new Font("Consolas", 8);
                     Font boldFont = new Font("Consolas", 10, FontStyle.Bold);
-                    float yPos = logo.Height + 0; // Espacio después de la imagen
+                    float yPos = logo.Height - 110; // Espacio después de la imagen
                     float leftMargin = 10;
 
                     // Dibuja el contenido del ticket

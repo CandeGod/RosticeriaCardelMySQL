@@ -36,11 +36,11 @@
             btnIncreaseProduct = new Guna.UI2.WinForms.Guna2Button();
             btnDecreaseProduct = new Guna.UI2.WinForms.Guna2Button();
             lblNameOfProduct = new Label();
-            lblAmount = new Label();
             lblPrice = new Label();
             pbImage = new PictureBox();
             lblStock = new Label();
             lblTotal = new Label();
+            txtAmount = new TextBox();
             ((System.ComponentModel.ISupportInitialize)pbImage).BeginInit();
             SuspendLayout();
             // 
@@ -55,7 +55,7 @@
             btnIncreaseProduct.FillColor = Color.Green;
             btnIncreaseProduct.Font = new Font("Segoe UI", 9F);
             btnIncreaseProduct.ForeColor = Color.White;
-            btnIncreaseProduct.Location = new Point(86, 169);
+            btnIncreaseProduct.Location = new Point(95, 169);
             btnIncreaseProduct.Name = "btnIncreaseProduct";
             btnIncreaseProduct.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnIncreaseProduct.Size = new Size(49, 49);
@@ -91,16 +91,6 @@
             lblNameOfProduct.Size = new Size(102, 31);
             lblNameOfProduct.TabIndex = 19;
             lblNameOfProduct.Text = "Nombre";
-            // 
-            // lblAmount
-            // 
-            lblAmount.AutoSize = true;
-            lblAmount.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
-            lblAmount.Location = new Point(53, 178);
-            lblAmount.Name = "lblAmount";
-            lblAmount.Size = new Size(27, 31);
-            lblAmount.TabIndex = 18;
-            lblAmount.Text = "0";
             // 
             // lblPrice
             // 
@@ -138,11 +128,19 @@
             // 
             lblTotal.AutoSize = true;
             lblTotal.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotal.Location = new Point(139, 187);
+            lblTotal.Location = new Point(146, 187);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(49, 20);
             lblTotal.TabIndex = 25;
             lblTotal.Text = "$0.00";
+            // 
+            // txtAmount
+            // 
+            txtAmount.Location = new Point(53, 180);
+            txtAmount.Name = "txtAmount";
+            txtAmount.Size = new Size(40, 27);
+            txtAmount.TabIndex = 26;
+            txtAmount.TextChanged += txtAmount_TextChanged;
             // 
             // UcComplements
             // 
@@ -150,6 +148,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(247, 203, 20);
             BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(txtAmount);
             Controls.Add(lblTotal);
             Controls.Add(pbImage);
             Controls.Add(lblStock);
@@ -157,7 +156,6 @@
             Controls.Add(btnIncreaseProduct);
             Controls.Add(btnDecreaseProduct);
             Controls.Add(lblNameOfProduct);
-            Controls.Add(lblAmount);
             Name = "UcComplements";
             Size = new Size(198, 231);
             ((System.ComponentModel.ISupportInitialize)pbImage).EndInit();
@@ -175,5 +173,6 @@
         private PictureBox pbImage;
         private Label lblStock;
         private Label lblTotal;
+        private TextBox txtAmount;
     }
 }
