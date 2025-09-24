@@ -15,7 +15,8 @@ namespace RosticeriaCardelV2.Formularios
         public FrmCashCut()
         {
             InitializeComponent();
-            _cashCutRepository = new CashCutRepository();
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            _cashCutRepository = new CashCutRepository(databaseConnection);
         }
 
         private void btnTerminarDia_Click(object sender, EventArgs e)
