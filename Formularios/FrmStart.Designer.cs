@@ -58,7 +58,7 @@
             // 
             guna2HtmlLabel3.BackColor = Color.Transparent;
             guna2HtmlLabel3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guna2HtmlLabel3.Location = new Point(1322, 704);
+            guna2HtmlLabel3.Location = new Point(1115, 565);
             guna2HtmlLabel3.Name = "guna2HtmlLabel3";
             guna2HtmlLabel3.Size = new Size(216, 30);
             guna2HtmlLabel3.TabIndex = 16;
@@ -68,7 +68,7 @@
             // 
             guna2HtmlLabel2.BackColor = Color.Transparent;
             guna2HtmlLabel2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guna2HtmlLabel2.Location = new Point(1323, 412);
+            guna2HtmlLabel2.Location = new Point(1536, 201);
             guna2HtmlLabel2.Name = "guna2HtmlLabel2";
             guna2HtmlLabel2.Size = new Size(186, 30);
             guna2HtmlLabel2.TabIndex = 15;
@@ -78,7 +78,7 @@
             // 
             guna2HtmlLabel1.BackColor = Color.Transparent;
             guna2HtmlLabel1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guna2HtmlLabel1.Location = new Point(1323, 119);
+            guna2HtmlLabel1.Location = new Point(1116, 201);
             guna2HtmlLabel1.Name = "guna2HtmlLabel1";
             guna2HtmlLabel1.Size = new Size(205, 30);
             guna2HtmlLabel1.TabIndex = 14;
@@ -100,7 +100,7 @@
             btnProducts.ImageAlign = HorizontalAlignment.Right;
             btnProducts.ImageOffset = new Point(-10, 0);
             btnProducts.ImageSize = new Size(64, 64);
-            btnProducts.Location = new Point(1247, 740);
+            btnProducts.Location = new Point(1040, 601);
             btnProducts.Name = "btnProducts";
             btnProducts.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnProducts.Size = new Size(368, 95);
@@ -125,7 +125,7 @@
             btnSalesHistory.ImageAlign = HorizontalAlignment.Right;
             btnSalesHistory.ImageOffset = new Point(5, 0);
             btnSalesHistory.ImageSize = new Size(64, 64);
-            btnSalesHistory.Location = new Point(1247, 448);
+            btnSalesHistory.Location = new Point(1460, 237);
             btnSalesHistory.Name = "btnSalesHistory";
             btnSalesHistory.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnSalesHistory.Size = new Size(368, 95);
@@ -150,7 +150,7 @@
             btnPointOfSale.ImageAlign = HorizontalAlignment.Right;
             btnPointOfSale.ImageOffset = new Point(40, 0);
             btnPointOfSale.ImageSize = new Size(64, 64);
-            btnPointOfSale.Location = new Point(1247, 155);
+            btnPointOfSale.Location = new Point(1040, 237);
             btnPointOfSale.Name = "btnPointOfSale";
             btnPointOfSale.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnPointOfSale.Size = new Size(368, 95);
@@ -222,7 +222,7 @@
             // 
             guna2HtmlLabel4.BackColor = Color.Transparent;
             guna2HtmlLabel4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guna2HtmlLabel4.Location = new Point(1322, 870);
+            guna2HtmlLabel4.Location = new Point(1582, 565);
             guna2HtmlLabel4.Name = "guna2HtmlLabel4";
             guna2HtmlLabel4.Size = new Size(127, 30);
             guna2HtmlLabel4.TabIndex = 18;
@@ -240,11 +240,11 @@
             btnCorteCaja.FillColor = Color.FromArgb(255, 92, 0);
             btnCorteCaja.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnCorteCaja.ForeColor = Color.White;
-            btnCorteCaja.Image = (Image)resources.GetObject("btnCorteCaja.Image");
+            btnCorteCaja.Image = Properties.Resources.icons8_imprimir_50;
             btnCorteCaja.ImageAlign = HorizontalAlignment.Right;
-            btnCorteCaja.ImageOffset = new Point(-10, 0);
+            btnCorteCaja.ImageOffset = new Point(20, 0);
             btnCorteCaja.ImageSize = new Size(64, 64);
-            btnCorteCaja.Location = new Point(1247, 906);
+            btnCorteCaja.Location = new Point(1460, 601);
             btnCorteCaja.Name = "btnCorteCaja";
             btnCorteCaja.ShadowDecoration.CustomizableEdges = customizableEdges8;
             btnCorteCaja.Size = new Size(368, 95);

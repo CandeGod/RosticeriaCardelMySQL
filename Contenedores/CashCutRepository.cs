@@ -158,7 +158,8 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al sincronizar los cortes de caja: {ex.Message}");
+                //MessageBox.Show($"Error al sincronizar los cortes de caja: {ex.Message}");
+                Console.WriteLine("Error al sincronizar los cortes de caja: " + ex.Message);
             }
         }
 

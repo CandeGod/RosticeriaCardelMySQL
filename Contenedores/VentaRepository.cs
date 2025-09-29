@@ -145,7 +145,8 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al sincronizar ventas: {ex.Message}");
+                //MessageBox.Show($"Error al sincronizar ventas: {ex.Message}");
+                Console.WriteLine("Error al sincronizar productos: " + ex.Message);
             }
         }
 

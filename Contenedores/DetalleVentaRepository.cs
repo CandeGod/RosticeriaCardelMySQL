@@ -152,14 +152,16 @@ namespace RosticeriaCardelV2.Contenedores
                         {
                             // Si ocurre un error, hacer rollback de la transacción
                             await transaction.RollbackAsync();
-                            MessageBox.Show($"Error al sincronizar detalles de venta: {ex.Message}");
+                            //MessageBox.Show($"Error al sincronizar detalles de venta: {ex.Message}");
+                            Console.WriteLine("Error al sincronizar Detalles de venta: " + ex.Message);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al sincronizar detalles de venta: {ex.Message}");
+                //MessageBox.Show($"Error al sincronizar detalles de venta: {ex.Message}");
+                Console.WriteLine("Error al sincronizar detalles de venta: " + ex.Message);
             }
         }
 
