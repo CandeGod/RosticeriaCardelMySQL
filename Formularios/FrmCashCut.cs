@@ -127,6 +127,7 @@ namespace RosticeriaCardelV2.Formularios
                 btnTerminarDia.Enabled = true;
 
                 MessageBox.Show("Corte iniciado. Ahora puedes registrar gastos.", "Corte Iniciado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dgvCashCut.DataSource = _cashCutRepository.GetCashCut();
             }
             catch (Exception ex)
             {

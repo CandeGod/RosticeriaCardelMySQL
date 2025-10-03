@@ -121,7 +121,7 @@ namespace RosticeriaCardelV2.Contenedores
                             if (exists > 0)
                             {
                                 // Actualizar corte de caja existente
-                                var updateQuery = "UPDATE CorteCaja SET Fecha = @Fecha, MontoInicial = @MontoInicial, TotalVentas = @TotalVentas, TotalGastos = @TotalGastos, MontoFinal = @MontoFinal WHERE IdCorte = @IdCorte";
+                                var updateQuery = "UPDATE CorteCaja SET Fecha = @Fecha, MontoInicial = @MontoInicial, TotalVentas = @TotalVentas, TotalGastos = @TotalGastos, MontoFinal = @MontoFinal, Estado = @Estado, WHERE IdCorte = @IdCorte";
                                 using (MySqlCommand updateCommand = new MySqlCommand(updateQuery, cloudConnection))
                                 {
                                     updateCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
@@ -130,6 +130,7 @@ namespace RosticeriaCardelV2.Contenedores
                                     updateCommand.Parameters.AddWithValue("@TotalVentas", row["TotalVentas"]);
                                     updateCommand.Parameters.AddWithValue("@TotalGastos", row["TotalGastos"]);
                                     updateCommand.Parameters.AddWithValue("@MontoFinal", row["MontoFinal"]);
+                                    updateCommand.Parameters.AddWithValue("@Estado", row["Estado"]);
 
                                     await updateCommand.ExecuteNonQueryAsync();
                                 }
@@ -137,7 +138,7 @@ namespace RosticeriaCardelV2.Contenedores
                             else
                             {
                                 // Insertar nuevo corte de caja
-                                var insertQuery = "INSERT INTO CorteCaja (IdCorte, Fecha, MontoInicial, TotalVentas, TotalGastos, MontoFinal) VALUES (@IdCorte, @Fecha, @MontoInicial, @TotalVentas, @TotalGastos, @MontoFinal)";
+                                var insertQuery = "INSERT INTO CorteCaja (IdCorte, Fecha, MontoInicial, TotalVentas, TotalGastos, MontoFinal, Estado) VALUES (@IdCorte, @Fecha, @MontoInicial, @TotalVentas, @TotalGastos, @MontoFinal, @Estado)";
                                 using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, cloudConnection))
                                 {
                                     insertCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
@@ -146,6 +147,7 @@ namespace RosticeriaCardelV2.Contenedores
                                     insertCommand.Parameters.AddWithValue("@TotalVentas", row["TotalVentas"]);
                                     insertCommand.Parameters.AddWithValue("@TotalGastos", row["TotalGastos"]);
                                     insertCommand.Parameters.AddWithValue("@MontoFinal", row["MontoFinal"]);
+                                    insertCommand.Parameters.AddWithValue("@Estado", row["Estado"]);
 
                                     await insertCommand.ExecuteNonQueryAsync();
                                 }
@@ -162,7 +164,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"Error al sincronizar los cortes de caja: {ex.Message}");
+                MessageBox.Show($"Error al sincronizar los cortes de caja: {ex.Message}");
                 Console.WriteLine("Error al sincronizar los cortes de caja: " + ex.Message);
             }
         }
