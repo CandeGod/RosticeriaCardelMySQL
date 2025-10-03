@@ -12,6 +12,7 @@ namespace RosticeriaCardelV2.Formularios
     {
         private readonly CashCutRepository _cashCutRepository;
         private readonly GastoRepository _gastoRepository;
+        private readonly VentaRepository _ventaRepository;
         private int _idCorteActual;
         private bool _corteIniciado = false;
 
@@ -21,8 +22,10 @@ namespace RosticeriaCardelV2.Formularios
             DatabaseConnection databaseConnection = new DatabaseConnection();
             _cashCutRepository = new CashCutRepository(databaseConnection);
             _gastoRepository = new GastoRepository(databaseConnection);
+            _ventaRepository = new VentaRepository(databaseConnection);
 
             VerificarCorteDelDia();
+            dgvVentasHoy.DataSource = _ventaRepository.GetVentasHoy();
         }
 
         private void VerificarCorteDelDia()
@@ -252,21 +255,21 @@ namespace RosticeriaCardelV2.Formularios
         {
             if (e.RowIndex >= 0)
             {
-                DataGridViewRow row = dgvCashCut.Rows[e.RowIndex];
-                CashCut selectedCorte = (CashCut)row.DataBoundItem;
+                DataGridViewRow fila = dgvCashCut.Rows[e.RowIndex];
+                object valorFecha = fila.Cells["Fecha"].Value;
 
+                if (valorFecha != null && DateTime.TryParse(valorFecha.ToString(), out DateTime fechaSeleccionada))
+                {
+                    List<Gasto> gastos = _gastoRepository.GastosPorFecha(fechaSeleccionada);
 
-                string resumen = $"Fecha: {selectedCorte.Fecha}\n" +
-                         $"Monto Inicial: {selectedCorte.MontoInicial:C}\n" +
-                         $"Total Ventas: {selectedCorte.TotalVentas:C}\n" +
-                         $"Total Gastos: {selectedCorte.TotalGastos:C}\n" +
-                         $"Monto Final: {selectedCorte.MontoFinal:C}\n" +
-                         $"Diferencia: {(selectedCorte.TotalVentas - selectedCorte.TotalGastos):C}\n" +
-                         $"Estado: {selectedCorte.Estado:C}";
-
-
-                // Mostrar el resumen en el RichTextBox
-                rtxtResume.Text = resumen;
+                    dgvGastos.DataSource = gastos;
+                    dgvVentasHoy.DataSource = _ventaRepository.GetSalesBySpecificDate(fechaSeleccionada);
+                }
+                else
+                {
+                    MessageBox.Show("No se puedo obtener la fecha de la fila seleccionada");
+                }
+                
             }
         }
 

@@ -37,12 +37,10 @@
             dgvCashCut = new DataGridView();
             txtMontoInicial = new TextBox();
             btnTerminarDia = new Guna.UI2.WinForms.Guna2Button();
-            rtxtResume = new RichTextBox();
             lblSaldoInicial = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2HtmlLabel1 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2HtmlLabel2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             guna2HtmlLabel3 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            rtxtGastos = new RichTextBox();
             btnIniciarCorte = new Guna.UI2.WinForms.Guna2Button();
             btnAgregarGasto = new Guna.UI2.WinForms.Guna2Button();
             groupBoxGastos = new GroupBox();
@@ -50,9 +48,11 @@
             lblTotalGastos = new Guna.UI2.WinForms.Guna2HtmlLabel();
             txtConceptoGasto = new TextBox();
             txtMontoGasto = new TextBox();
+            dgvVentasHoy = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvCashCut).BeginInit();
             groupBoxGastos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGastos).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvVentasHoy).BeginInit();
             SuspendLayout();
             // 
             // dgvCashCut
@@ -61,6 +61,7 @@
             dgvCashCut.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvCashCut.Location = new Point(1128, 151);
             dgvCashCut.Name = "dgvCashCut";
+            dgvCashCut.ReadOnly = true;
             dgvCashCut.RowHeadersWidth = 51;
             dgvCashCut.Size = new Size(743, 560);
             dgvCashCut.TabIndex = 0;
@@ -93,14 +94,6 @@
             btnTerminarDia.Text = "Terminar día";
             btnTerminarDia.Click += btnTerminarDia_Click;
             // 
-            // rtxtResume
-            // 
-            rtxtResume.Location = new Point(32, 151);
-            rtxtResume.Name = "rtxtResume";
-            rtxtResume.Size = new Size(527, 312);
-            rtxtResume.TabIndex = 3;
-            rtxtResume.Text = "";
-            // 
             // lblSaldoInicial
             // 
             lblSaldoInicial.BackColor = Color.Transparent;
@@ -127,9 +120,9 @@
             guna2HtmlLabel2.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             guna2HtmlLabel2.Location = new Point(183, 69);
             guna2HtmlLabel2.Name = "guna2HtmlLabel2";
-            guna2HtmlLabel2.Size = new Size(249, 39);
+            guna2HtmlLabel2.Size = new Size(184, 39);
             guna2HtmlLabel2.TabIndex = 17;
-            guna2HtmlLabel2.Text = "Desglose de ventas ";
+            guna2HtmlLabel2.Text = "Ventas de hoy";
             // 
             // guna2HtmlLabel3
             // 
@@ -137,17 +130,9 @@
             guna2HtmlLabel3.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             guna2HtmlLabel3.Location = new Point(716, 69);
             guna2HtmlLabel3.Name = "guna2HtmlLabel3";
-            guna2HtmlLabel3.Size = new Size(249, 39);
+            guna2HtmlLabel3.Size = new Size(183, 39);
             guna2HtmlLabel3.TabIndex = 19;
-            guna2HtmlLabel3.Text = "Desglose de gastos";
-            // 
-            // rtxtGastos
-            // 
-            rtxtGastos.Location = new Point(565, 151);
-            rtxtGastos.Name = "rtxtGastos";
-            rtxtGastos.Size = new Size(527, 312);
-            rtxtGastos.TabIndex = 18;
-            rtxtGastos.Text = "";
+            guna2HtmlLabel3.Text = "Gastos de hoy";
             // 
             // btnIniciarCorte
             // 
@@ -202,11 +187,13 @@
             // 
             // dgvGastos
             // 
+            dgvGastos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvGastos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvGastos.Location = new Point(69, 649);
+            dgvGastos.Location = new Point(556, 151);
             dgvGastos.Name = "dgvGastos";
+            dgvGastos.ReadOnly = true;
             dgvGastos.RowHeadersWidth = 51;
-            dgvGastos.Size = new Size(566, 188);
+            dgvGastos.Size = new Size(548, 312);
             dgvGastos.TabIndex = 23;
             // 
             // lblTotalGastos
@@ -233,11 +220,23 @@
             txtMontoGasto.Size = new Size(125, 27);
             txtMontoGasto.TabIndex = 26;
             // 
+            // dgvVentasHoy
+            // 
+            dgvVentasHoy.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvVentasHoy.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvVentasHoy.Location = new Point(69, 151);
+            dgvVentasHoy.Name = "dgvVentasHoy";
+            dgvVentasHoy.ReadOnly = true;
+            dgvVentasHoy.RowHeadersWidth = 51;
+            dgvVentasHoy.Size = new Size(477, 312);
+            dgvVentasHoy.TabIndex = 27;
+            // 
             // FrmCashCut
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(dgvVentasHoy);
             Controls.Add(btnIniciarCorte);
             Controls.Add(txtMontoGasto);
             Controls.Add(txtConceptoGasto);
@@ -245,11 +244,9 @@
             Controls.Add(dgvGastos);
             Controls.Add(groupBoxGastos);
             Controls.Add(guna2HtmlLabel3);
-            Controls.Add(rtxtGastos);
             Controls.Add(guna2HtmlLabel2);
             Controls.Add(guna2HtmlLabel1);
             Controls.Add(lblSaldoInicial);
-            Controls.Add(rtxtResume);
             Controls.Add(txtMontoInicial);
             Controls.Add(dgvCashCut);
             Name = "FrmCashCut";
@@ -259,6 +256,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvCashCut).EndInit();
             groupBoxGastos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvGastos).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvVentasHoy).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -268,13 +266,11 @@
         private DataGridView dgvCashCut;
         private TextBox txtMontoInicial;
         private Guna.UI2.WinForms.Guna2Button btnTerminarDia;
-        private RichTextBox rtxtResume;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblSaldoInicial;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel1;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel2;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel3;
         private RichTextBox richTextBox1;
-        private RichTextBox rtxtGastos;
         private Guna.UI2.WinForms.Guna2Button btnIniciarCorte;
         private Guna.UI2.WinForms.Guna2Button btnAgregarGasto;
         private GroupBox groupBoxGastos;
@@ -282,5 +278,6 @@
         private Guna.UI2.WinForms.Guna2HtmlLabel lblTotalGastos;
         private TextBox txtConceptoGasto;
         private TextBox txtMontoGasto;
+        private DataGridView dgvVentasHoy;
     }
 }

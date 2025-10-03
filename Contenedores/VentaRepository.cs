@@ -45,7 +45,7 @@ namespace RosticeriaCardelV2.Contenedores
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     connection.Open();
-                    string query = "SELECT * FROM Ventas";
+                    string query = "SELECT * FROM Ventas ORDER BY IdVenta DESC";
                     MySqlCommand command = new MySqlCommand(query, connection);
                     MySqlDataAdapter da = new MySqlDataAdapter(command);
 
@@ -226,5 +226,47 @@ namespace RosticeriaCardelV2.Contenedores
             }
             return dtVentas;
         }
+
+        public List<Venta> GetVentasHoy()
+        {
+            List<Venta> ventas = new List<Venta>();
+
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio " +
+                        "FROM Ventas WHERE DATE(FECHA) = CURDATE();";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Venta venta = new Venta
+                                {
+                                    IdVenta = Convert.ToInt32(reader["IdVenta"]),
+                                    Fecha = Convert.ToDateTime(reader["Fecha"]),
+                                    Total = Convert.ToDecimal(reader["Total"]),
+                                    MontoPagado = reader["MontoPagado"] != DBNull.Value ? Convert.ToDecimal(reader["MontoPagado"]) : (decimal?)null,
+                                    Cambio = reader["Cambio"] != DBNull.Value ? Convert.ToDecimal(reader["Cambio"]) : (decimal?)null
+                                };
+                                ventas.Add(venta);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al cargar ventas de hoy: {ex.Message}");
+            }
+
+            return ventas;
+        }
+
+        
     }
 }

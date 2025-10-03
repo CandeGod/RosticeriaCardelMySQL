@@ -101,5 +101,53 @@ namespace RosticeriaCardelV2.Contenedores
                 }
             }
         }
+
+
+       
+
+        public List<Gasto>GastosPorFecha(DateTime fecha)
+        {
+            List<Gasto> gastos = new List<Gasto>();
+
+            try
+            {
+                using(MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "SELECT IdGasto, IdCorte, Concepto, Monto, Fecha " +
+                        "FROM Gastos WHERE DATE(Fecha) = DATE(@Fecha)";
+
+                    using(MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Fecha", fecha.Date);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Gasto gasto = new Gasto
+                                {
+                                    IdGasto = Convert.ToInt32(reader["IdGasto"]),
+                                    IdCorte = Convert.ToInt32(reader["IdCorte"]),
+                                    Concepto = reader["Concepto"].ToString(),
+                                    Monto = Convert.ToDecimal(reader["Monto"]),
+                                    Fecha = Convert.ToDateTime(reader["Fecha"]),
+
+                                };
+                                gastos.Add(gasto);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al cargar los gastos de la fecha seleccionada: {ex.Message}");
+            }
+
+
+            return gastos;
+        }
+
+        
     }
 }
