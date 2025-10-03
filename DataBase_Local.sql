@@ -52,10 +52,25 @@ CREATE TABLE CorteCaja (
     IdCorte INT PRIMARY KEY AUTO_INCREMENT,
     Fecha DATETIME NOT NULL,
     MontoInicial DECIMAL(10, 2) NOT NULL,
-    Sincronizado BOOLEAN NOT NULL DEFAULT 0,
-    MontoFinal DECIMAL(10, 2) NOT NULL
+    TotalVentas DECIMAL(10,2) NOT NULL DEFAULT 0, -- campo nuevo
+    TotalGastos DECIMAL(10,2) NOT NULL DEFAULT 0, -- campo nuevo
+    MontoFinal DECIMAL(10, 2) NOT NULL,
+    Sincronizado BOOLEAN NOT NULL DEFAULT 0
 );
 
+-- aun esta por validar esta tabla: 
+CREATE TABLE Gastos (
+    IdGasto INT PRIMARY KEY AUTO_INCREMENT,
+    IdCorte INT NOT NULL,           -- Relación con el corte de caja
+    Concepto VARCHAR(200) NOT NULL,
+    Monto DECIMAL(10,2) NOT NULL,
+    Fecha DATETIME NOT NULL,
+    Sincronizado BOOLEAN NOT NULL DEFAULT 0,
+    FOREIGN KEY (IdCorte) REFERENCES CorteCaja(IdCorte)
+);
+
+
+select * from ventas 
 select * from CorteCaja
 
 -- Datos para la base de datos en la nube despues de agregar productos en la base de datos local

@@ -121,12 +121,14 @@ namespace RosticeriaCardelV2.Contenedores
                             if (exists > 0)
                             {
                                 // Actualizar corte de caja existente
-                                var updateQuery = "UPDATE CorteCaja SET Fecha = @Fecha, MontoInicial = @MontoInicial, MontoFinal = @MontoFinal WHERE IdCorte = @IdCorte";
+                                var updateQuery = "UPDATE CorteCaja SET Fecha = @Fecha, MontoInicial = @MontoInicial, TotalVentas = @TotalVentas, TotalGastos = @TotalGastos, MontoFinal = @MontoFinal WHERE IdCorte = @IdCorte";
                                 using (MySqlCommand updateCommand = new MySqlCommand(updateQuery, cloudConnection))
                                 {
                                     updateCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
                                     updateCommand.Parameters.AddWithValue("@Fecha", row["Fecha"]);
                                     updateCommand.Parameters.AddWithValue("@MontoInicial", row["MontoInicial"]);
+                                    updateCommand.Parameters.AddWithValue("@TotalVentas", row["TotalVentas"]);
+                                    updateCommand.Parameters.AddWithValue("@TotalGastos", row["TotalGastos"]);
                                     updateCommand.Parameters.AddWithValue("@MontoFinal", row["MontoFinal"]);
 
                                     await updateCommand.ExecuteNonQueryAsync();
@@ -135,12 +137,14 @@ namespace RosticeriaCardelV2.Contenedores
                             else
                             {
                                 // Insertar nuevo corte de caja
-                                var insertQuery = "INSERT INTO CorteCaja (IdCorte, Fecha, MontoInicial, MontoFinal) VALUES (@IdCorte, @Fecha, @MontoInicial, @MontoFinal)";
+                                var insertQuery = "INSERT INTO CorteCaja (IdCorte, Fecha, MontoInicial, TotalVentas, TotalGastos, MontoFinal) VALUES (@IdCorte, @Fecha, @MontoInicial, @TotalVentas, @TotalGastos, @MontoFinal)";
                                 using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, cloudConnection))
                                 {
                                     insertCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
                                     insertCommand.Parameters.AddWithValue("@Fecha", row["Fecha"]);
                                     insertCommand.Parameters.AddWithValue("@MontoInicial", row["MontoInicial"]);
+                                    insertCommand.Parameters.AddWithValue("@TotalVentas", row["TotalVentas"]);
+                                    insertCommand.Parameters.AddWithValue("@TotalGastos", row["TotalGastos"]);
                                     insertCommand.Parameters.AddWithValue("@MontoFinal", row["MontoFinal"]);
 
                                     await insertCommand.ExecuteNonQueryAsync();
@@ -170,11 +174,14 @@ namespace RosticeriaCardelV2.Contenedores
                 connection.Open(); // Abre la conexión aquí dentro del bloque using
                 try
                 {
-                    string query = "INSERT INTO CorteCaja (Fecha, MontoInicial, MontoFinal) VALUES (@Fecha, @MontoInicial, @MontoFinal)";
+                    string query = @"INSERT INTO CorteCaja (Fecha, MontoInicial, TotalVentas, TotalGastos, MontoFinal, Estado) 
+                           VALUES (@Fecha, @MontoInicial, @TotalVentas, @TotalGastos, @MontoFinal, 'ACTIVO')";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Fecha", cut.Fecha);
                         command.Parameters.AddWithValue("@MontoInicial", cut.MontoInicial);
+                        command.Parameters.AddWithValue("@TotalVentas", cut.TotalVentas);
+                        command.Parameters.AddWithValue("@TotalGastos", cut.TotalGastos);
                         command.Parameters.AddWithValue("@MontoFinal", cut.MontoFinal);
 
                         command.ExecuteNonQuery();
@@ -212,7 +219,10 @@ namespace RosticeriaCardelV2.Contenedores
                                     IdCorte = reader["IdCorte"] != DBNull.Value ? Convert.ToInt32(reader["IdCorte"]) : 0,
                                     Fecha = reader["Fecha"] != DBNull.Value ? Convert.ToDateTime(reader["Fecha"]) : DateTime.MinValue,
                                     MontoInicial = reader["MontoInicial"] != DBNull.Value ? Convert.ToDecimal(reader["MontoInicial"]) : 0m,
-                                    MontoFinal = reader["MontoFinal"] != DBNull.Value ? Convert.ToDecimal(reader["MontoFinal"]) : 0m
+                                    TotalVentas = reader["TotalVentas"] != DBNull.Value ? Convert.ToDecimal(reader["TotalVentas"]) : 0m,
+                                    TotalGastos = reader["TotalGastos"] != DBNull.Value ? Convert.ToDecimal(reader["TotalGastos"]) : 0m,
+                                    MontoFinal = reader["MontoFinal"] != DBNull.Value ? Convert.ToDecimal(reader["MontoFinal"]) : 0m,
+                                    Estado = reader["Estado"] != DBNull.Value ? reader["Estado"].ToString() : "FINALIZADO"
                                 };
                                 cortes.Add(corte);
                             }
@@ -261,8 +271,8 @@ namespace RosticeriaCardelV2.Contenedores
             {
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
-                    connection.Open(); // Abre la conexión aquí dentro del bloque using
-                    string query = "SELECT COUNT(*) FROM CorteCaja WHERE DATE(Fecha) = @Fecha";
+                    connection.Open();
+                    string query = "SELECT COUNT(*) FROM CorteCaja WHERE DATE(Fecha) = @Fecha AND Estado = 'ACTIVO'";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Fecha", fecha.Date);
@@ -276,6 +286,131 @@ namespace RosticeriaCardelV2.Contenedores
             }
 
             return existe;
+        }
+
+        public decimal GetTotalExpensesOfTheDay(DateTime fecha)
+        {
+            decimal totalGastos = 0;
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = @"SELECT COALESCE(SUM(g.Monto), 0) 
+                           FROM Gastos g
+                           INNER JOIN CorteCaja c ON g.IdCorte = c.IdCorte
+                           WHERE DATE(c.Fecha) = @Fecha";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Fecha", fecha.Date);
+                        var result = command.ExecuteScalar();
+                        totalGastos = result != DBNull.Value ? Convert.ToDecimal(result) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener los gastos del día: " + ex.Message);
+            }
+            return totalGastos;
+        }
+
+
+        public CashCut GetCashCutByDate(DateTime fecha)
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                connection.Open();
+                string query = "SELECT * FROM CorteCaja WHERE DATE(Fecha) = @Fecha";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Fecha", fecha.Date);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new CashCut
+                            {
+                                IdCorte = Convert.ToInt32(reader["IdCorte"]),
+                                Fecha = Convert.ToDateTime(reader["Fecha"]),
+                                MontoInicial = Convert.ToDecimal(reader["MontoInicial"]),
+                                TotalVentas = Convert.ToDecimal(reader["TotalVentas"]),
+                                TotalGastos = Convert.ToDecimal(reader["TotalGastos"]),
+                                MontoFinal = Convert.ToDecimal(reader["MontoFinal"]),
+                                Estado = reader["Estado"] != DBNull.Value ? reader["Estado"].ToString() : "FINALIZADO"
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        public int GetLastCashCutId()
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                connection.Open();
+                string query = "SELECT MAX(IdCorte) FROM CorteCaja";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    var result = command.ExecuteScalar();
+                    return result != DBNull.Value ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
+        public void UpdateCashCut(int idCorte, decimal totalVentas, decimal totalGastos, decimal montoFinal)
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                connection.Open();
+                string query = @"UPDATE CorteCaja 
+                        SET TotalVentas = @TotalVentas, 
+                            TotalGastos = @TotalGastos, 
+                            MontoFinal = @MontoFinal,
+                            Estado = 'FINALIZADO'
+                        WHERE IdCorte = @IdCorte";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@TotalVentas", totalVentas);
+                    command.Parameters.AddWithValue("@TotalGastos", totalGastos);
+                    command.Parameters.AddWithValue("@MontoFinal", montoFinal);
+                    command.Parameters.AddWithValue("@IdCorte", idCorte);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public CashCut GetActiveCashCutByDate(DateTime fecha)
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                connection.Open();
+                string query = "SELECT * FROM CorteCaja WHERE DATE(Fecha) = @Fecha AND Estado = 'ACTIVO'";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Fecha", fecha.Date);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new CashCut
+                            {
+                                IdCorte = Convert.ToInt32(reader["IdCorte"]),
+                                Fecha = Convert.ToDateTime(reader["Fecha"]),
+                                MontoInicial = Convert.ToDecimal(reader["MontoInicial"]),
+                                TotalVentas = Convert.ToDecimal(reader["TotalVentas"]),
+                                TotalGastos = Convert.ToDecimal(reader["TotalGastos"]),
+                                MontoFinal = Convert.ToDecimal(reader["MontoFinal"]),
+                                Estado = reader["Estado"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

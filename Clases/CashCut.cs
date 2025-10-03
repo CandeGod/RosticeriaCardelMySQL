@@ -11,8 +11,9 @@ namespace RosticeriaCardelV2.Clases
         public int IdCorte {  get; set; }
         public DateTime Fecha { get; set; }
         public decimal MontoInicial { get; set; }
+        public decimal TotalVentas { get; set; }
+        public decimal TotalGastos { get; set; }
         public decimal MontoFinal { get; set; }
-
-
+        public string? Estado { get; set; }
     }
 }
