@@ -121,7 +121,7 @@ namespace RosticeriaCardelV2.Contenedores
                             if (exists > 0)
                             {
                                 // Actualizar corte de caja existente
-                                var updateQuery = "UPDATE CorteCaja SET Fecha = @Fecha, MontoInicial = @MontoInicial, TotalVentas = @TotalVentas, TotalGastos = @TotalGastos, MontoFinal = @MontoFinal, Estado = @Estado, WHERE IdCorte = @IdCorte";
+                                var updateQuery = "UPDATE CorteCaja SET Fecha = @Fecha, MontoInicial = @MontoInicial, TotalVentas = @TotalVentas, TotalGastos = @TotalGastos, MontoFinal = @MontoFinal, Estado = @Estado WHERE IdCorte = @IdCorte";
                                 using (MySqlCommand updateCommand = new MySqlCommand(updateQuery, cloudConnection))
                                 {
                                     updateCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
@@ -372,7 +372,8 @@ namespace RosticeriaCardelV2.Contenedores
                         SET TotalVentas = @TotalVentas, 
                             TotalGastos = @TotalGastos, 
                             MontoFinal = @MontoFinal,
-                            Estado = 'FINALIZADO'
+                            Estado = 'FINALIZADO',
+                            Sincronizado = 0
                         WHERE IdCorte = @IdCorte";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
