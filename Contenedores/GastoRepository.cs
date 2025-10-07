@@ -3,6 +3,7 @@ using RosticeriaCardel;
 using RosticeriaCardelV2.Clases;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,133 @@ namespace RosticeriaCardelV2.Contenedores
         {
             _databaseConnection = databaseConnection;
         }
+
+
+        // Obtener los gastos no sincronizados
+        public DataTable getUnsyncedGastos()
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using(MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM Gastos WHERE Sincronizado = 0";
+                    using(MySqlCommand commnad = new MySqlCommand(query, connection))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(commnad))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar los gastos no sincronizados");
+            }
+
+            return dt;
+        }
+
+        // Marcar los gastos como sincronizados una vez que se obtuvieron los no sincronizados.
+
+        public void MarkGastosAsSynced(int[] gastosId)
+        {
+            try
+            {
+                using (MySqlConnection connection = _databaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string query = "UPDATE Gastos SET Sincronizado = 1 WHERE IdGasto IN (" + string.Join(",", gastosId) + ")";
+                    using(MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al marcar los gastos como sincronizados: {ex.Message}");
+            }
+        }
+
+
+        // Sincronización asíncrona de gastos
+        public async Task SyncGastosToCloudAsync()
+        {
+            try
+            {
+                var unsyncedGastos = getUnsyncedGastos();
+                if(unsyncedGastos.Rows.Count == 0)
+                {
+                    return;
+                }
+
+                using(MySqlConnection cloudConnection = _databaseConnection.GetCloudConnection())
+                {
+                    await cloudConnection.OpenAsync();
+
+                    List<int> syncedIds = new List<int>();
+
+                    foreach (DataRow row in unsyncedGastos.Rows)
+                    {
+                        // Comprobar si el gasto ya existe en la base de datos en la nube
+                        var checkQuery = "SELECT COUNT(*) FROM Gastos WHERE IdGasto = @IdGasto";
+                        using(MySqlCommand checkCommand = new MySqlCommand(checkQuery, cloudConnection))
+                        {
+                            checkCommand.Parameters.AddWithValue("@IdGasto", row["IdGasto"]);
+                            int exist = Convert.ToInt32(await checkCommand.ExecuteScalarAsync());
+
+                            if (exist > 0)
+                            {
+                                // Actualizar el gasto existente
+                                var updateQuery = "UPDATE Gastos SET IdCorte = @IdCorte, Concepto = @Concepto, Monto = @Monto, Fecha = @Fecha WHERE IdGasto = @IdGasto";
+                                using(MySqlCommand updateCommand = new MySqlCommand(updateQuery, cloudConnection))
+                                {
+                                    updateCommand.Parameters.AddWithValue("@IdGasto", row["IdGasto"]);
+                                    updateCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
+                                    updateCommand.Parameters.AddWithValue("@Concepto", row["Concepto"]);
+                                    updateCommand.Parameters.AddWithValue("@Monto", row["Monto"]);
+                                    updateCommand.Parameters.AddWithValue("@Fecha", row["Fecha"]);
+
+                                    await updateCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+
+                            else
+                            {
+                                // Insertar nuevo gasto
+                                var insertQuery = "INSERT INTO Gastos (IdGasto, IdCorte, Concepto, Monto, Fecha) VALUES (@IdGasto, @IdCorte, @Concepto, @Monto, @Fecha)";
+                                using (MySqlCommand insertCommand =  new MySqlCommand(insertQuery, cloudConnection))
+                                {
+                                    insertCommand.Parameters.AddWithValue("@IdGasto", row["IdGasto"]);
+                                    insertCommand.Parameters.AddWithValue("@IdCorte", row["IdCorte"]);
+                                    insertCommand.Parameters.AddWithValue("@Concepto", row["Concepto"]);
+                                    insertCommand.Parameters.AddWithValue("@Monto", row["Monto"]);
+                                    insertCommand.Parameters.AddWithValue("@Fecha", row["Fecha"]);
+
+                                    await insertCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+                        }
+                        // Agregar el Id del Gasto sincronizado
+                        syncedIds.Add(Convert.ToInt32(row["IdGasto"]));
+                    }
+
+                    // Marcar los Gastos como sincronizados en la base de datos local
+                    MarkGastosAsSynced(syncedIds.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al sincronizar los gastos: {ex.Message}");
+                Console.WriteLine("Error al sincronizar los gastos: " + ex.Message);
+            }
+        }
+
+
         public void AddExpense(Gasto gasto)
         {
              using (MySqlConnection connection = _databaseConnection.GetConnection())
