@@ -65,9 +65,9 @@ CREATE TABLE Gastos (
 
 
 insert into Variaciones (IdVariacion, IdProducto, NombreVariacion, Precio, Activo)
-values (1, 1, 'Natural', 180, 1),
-(2, 1, 'Adobado', 180, 1),
-(3, 1, 'chiltepín', 180, 1);
+values (1, 1, 'Natural', 200, 1),
+(2, 1, 'Adobado', 200, 1),
+(3, 1, 'chiltepín', 200, 1);
 
 UPDATE Variaciones
 SET Precio = 200

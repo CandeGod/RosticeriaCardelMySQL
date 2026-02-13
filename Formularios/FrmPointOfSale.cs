@@ -731,7 +731,7 @@ namespace RosticeriaCardelV2.Formularios
                 printDoc.PrintPage += (s, ev) =>
                 {
                     // Cargar la imagen (asegúrate de que la ruta es correcta)
-                    Image logo = Image.FromFile(@"C:\Tec\Trabajos\Archivos de la rosticeriaCardel\Imagenes\RosticeríaSabrosonPNG.ico"); // Reemplaza con la ruta de tu imagen
+                    Image logo = Properties.Resources.RosticeríaSabrosonIco;
 
                     // Calcular la posición para centrar la imagen
                     float imageWidth = logo.Width;

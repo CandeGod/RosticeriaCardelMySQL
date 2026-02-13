@@ -153,6 +153,16 @@ namespace RosticeriaCardelV2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RosticeríaSabrosonIco {
+            get {
+                object obj = ResourceManager.GetObject("RosticeríaSabrosonIco", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap RosticeríaSabrosonPNG {
             get {
                 object obj = ResourceManager.GetObject("RosticeríaSabrosonPNG", resourceCulture);
