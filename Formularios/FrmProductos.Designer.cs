@@ -81,7 +81,7 @@
             dgvProductos.Name = "dgvProductos";
             dgvProductos.ReadOnly = true;
             dgvProductos.RowHeadersWidth = 51;
-            dgvProductos.Size = new Size(1131, 442);
+            dgvProductos.Size = new Size(1131, 398);
             dgvProductos.TabIndex = 0;
             dgvProductos.CellClick += dgvProductos_CellClick;
             // 
