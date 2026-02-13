@@ -50,6 +50,9 @@ namespace RosticeriaCardelV2.Formularios
             dgvCart.Columns.Add("Cantidad", "Cantidad");
             dgvCart.Columns.Add("SubTotal", "SubTotal");
 
+            dgvCart.Columns["idProducto"].Visible = false;
+            dgvCart.Columns["idVariacion"].Visible = false;
+
             Complements();
         }
 
