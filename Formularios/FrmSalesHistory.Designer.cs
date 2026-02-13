@@ -317,7 +317,7 @@
             dgvSales.Name = "dgvSales";
             dgvSales.ReadOnly = true;
             dgvSales.RowHeadersWidth = 51;
-            dgvSales.Size = new Size(927, 690);
+            dgvSales.Size = new Size(927, 575);
             dgvSales.TabIndex = 50;
             dgvSales.CellClick += dgvSales_CellClick;
             // 

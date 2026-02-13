@@ -25,13 +25,13 @@ namespace RosticeriaCardelV2.Formularios
             _databaseConnection = new DatabaseConnection();
             _detalleVentaRepository = new DetalleVentaRepository(_databaseConnection);
             _ventaRepository = new VentaRepository(_databaseConnection);
-
+            dgvSales.DataSource = _ventaRepository.GetVentasHoy();
         }
 
         private void FrmSalesHistory_Load(object sender, EventArgs e)
         {
-            DataTable salesData = _ventaRepository.GetAllSales();
-            dgvSales.DataSource = salesData;
+            //DataTable salesData = _ventaRepository.GetAllSales();
+            //dgvSales.DataSource = salesData;
 
             cbDates.SelectedItem = "Hoy";
 

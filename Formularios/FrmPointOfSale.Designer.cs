@@ -152,7 +152,7 @@
             btnCancelSale.ImageAlign = HorizontalAlignment.Right;
             btnCancelSale.ImageOffset = new Point(10, 0);
             btnCancelSale.ImageSize = new Size(40, 40);
-            btnCancelSale.Location = new Point(1493, 934);
+            btnCancelSale.Location = new Point(1518, 890);
             btnCancelSale.Name = "btnCancelSale";
             btnCancelSale.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnCancelSale.Size = new Size(360, 56);
@@ -177,7 +177,7 @@
             btnDeleteArticle.ImageAlign = HorizontalAlignment.Right;
             btnDeleteArticle.ImageOffset = new Point(10, 0);
             btnDeleteArticle.ImageSize = new Size(40, 40);
-            btnDeleteArticle.Location = new Point(1493, 840);
+            btnDeleteArticle.Location = new Point(1518, 796);
             btnDeleteArticle.Name = "btnDeleteArticle";
             btnDeleteArticle.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnDeleteArticle.Size = new Size(360, 56);
@@ -191,7 +191,7 @@
             panel2.BorderStyle = BorderStyle.Fixed3D;
             panel2.Controls.Add(label1);
             panel2.Controls.Add(lblTotal);
-            panel2.Location = new Point(764, 744);
+            panel2.Location = new Point(789, 700);
             panel2.Name = "panel2";
             panel2.Size = new Size(333, 152);
             panel2.TabIndex = 74;
@@ -233,7 +233,7 @@
             btnPay.Image = Properties.Resources.si;
             btnPay.ImageAlign = HorizontalAlignment.Right;
             btnPay.ImageSize = new Size(50, 50);
-            btnPay.Location = new Point(764, 918);
+            btnPay.Location = new Point(789, 874);
             btnPay.Name = "btnPay";
             btnPay.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnPay.Size = new Size(333, 88);
@@ -655,9 +655,9 @@
             // flpComplements
             // 
             flpComplements.AutoScroll = true;
-            flpComplements.Location = new Point(729, 159);
+            flpComplements.Location = new Point(680, 159);
             flpComplements.Name = "flpComplements";
-            flpComplements.Size = new Size(567, 412);
+            flpComplements.Size = new Size(660, 513);
             flpComplements.TabIndex = 91;
             // 
             // FrmPointOfSale

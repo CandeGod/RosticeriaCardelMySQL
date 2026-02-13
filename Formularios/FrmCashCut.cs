@@ -269,10 +269,18 @@ namespace RosticeriaCardelV2.Formularios
                 {
                     MessageBox.Show("No se puedo obtener la fecha de la fila seleccionada");
                 }
-                
+
             }
         }
 
-        
+        private void lblSaldoInicial_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2HtmlLabel4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

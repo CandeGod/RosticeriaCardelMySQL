@@ -49,6 +49,8 @@
             txtConceptoGasto = new TextBox();
             txtMontoGasto = new TextBox();
             dgvVentasHoy = new DataGridView();
+            guna2HtmlLabel4 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            guna2HtmlLabel5 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             ((System.ComponentModel.ISupportInitialize)dgvCashCut).BeginInit();
             groupBoxGastos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGastos).BeginInit();
@@ -69,9 +71,10 @@
             // 
             // txtMontoInicial
             // 
-            txtMontoInicial.Location = new Point(1238, 806);
+            txtMontoInicial.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtMontoInicial.Location = new Point(296, 510);
             txtMontoInicial.Name = "txtMontoInicial";
-            txtMontoInicial.Size = new Size(125, 27);
+            txtMontoInicial.Size = new Size(197, 51);
             txtMontoInicial.TabIndex = 1;
             // 
             // btnTerminarDia
@@ -83,10 +86,10 @@
             btnTerminarDia.DisabledState.CustomBorderColor = Color.DarkGray;
             btnTerminarDia.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnTerminarDia.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnTerminarDia.FillColor = Color.FromArgb(0, 192, 0);
+            btnTerminarDia.FillColor = Color.Goldenrod;
             btnTerminarDia.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnTerminarDia.ForeColor = Color.White;
-            btnTerminarDia.Location = new Point(90, 23);
+            btnTerminarDia.Location = new Point(1181, 26);
             btnTerminarDia.Name = "btnTerminarDia";
             btnTerminarDia.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnTerminarDia.Size = new Size(225, 56);
@@ -97,12 +100,13 @@
             // lblSaldoInicial
             // 
             lblSaldoInicial.BackColor = Color.Transparent;
-            lblSaldoInicial.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSaldoInicial.Location = new Point(1238, 753);
+            lblSaldoInicial.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSaldoInicial.Location = new Point(93, 510);
             lblSaldoInicial.Name = "lblSaldoInicial";
-            lblSaldoInicial.Size = new Size(123, 30);
+            lblSaldoInicial.Size = new Size(197, 47);
             lblSaldoInicial.TabIndex = 15;
             lblSaldoInicial.Text = "Saldo inicial:";
+            lblSaldoInicial.Click += lblSaldoInicial_Click;
             // 
             // guna2HtmlLabel1
             // 
@@ -146,7 +150,7 @@
             btnIniciarCorte.FillColor = Color.FromArgb(0, 192, 0);
             btnIniciarCorte.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnIniciarCorte.ForeColor = Color.White;
-            btnIniciarCorte.Location = new Point(855, 842);
+            btnIniciarCorte.Location = new Point(547, 505);
             btnIniciarCorte.Name = "btnIniciarCorte";
             btnIniciarCorte.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnIniciarCorte.Size = new Size(225, 56);
@@ -166,7 +170,7 @@
             btnAgregarGasto.FillColor = Color.FromArgb(0, 192, 0);
             btnAgregarGasto.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAgregarGasto.ForeColor = Color.White;
-            btnAgregarGasto.Location = new Point(48, 85);
+            btnAgregarGasto.Location = new Point(6, 26);
             btnAgregarGasto.Name = "btnAgregarGasto";
             btnAgregarGasto.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnAgregarGasto.Size = new Size(267, 56);
@@ -176,14 +180,16 @@
             // 
             // groupBoxGastos
             // 
+            groupBoxGastos.BackColor = Color.Transparent;
             groupBoxGastos.Controls.Add(btnAgregarGasto);
             groupBoxGastos.Controls.Add(btnTerminarDia);
-            groupBoxGastos.Location = new Point(397, 502);
+            groupBoxGastos.FlatStyle = FlatStyle.Flat;
+            groupBoxGastos.ForeColor = Color.Transparent;
+            groupBoxGastos.Location = new Point(459, 727);
             groupBoxGastos.Name = "groupBoxGastos";
-            groupBoxGastos.Size = new Size(440, 141);
+            groupBoxGastos.Size = new Size(1412, 96);
             groupBoxGastos.TabIndex = 22;
             groupBoxGastos.TabStop = false;
-            groupBoxGastos.Text = "groupBox1";
             // 
             // dgvGastos
             // 
@@ -199,23 +205,23 @@
             // lblTotalGastos
             // 
             lblTotalGastos.BackColor = Color.Transparent;
-            lblTotalGastos.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotalGastos.Location = new Point(69, 485);
+            lblTotalGastos.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotalGastos.Location = new Point(174, 664);
             lblTotalGastos.Name = "lblTotalGastos";
-            lblTotalGastos.Size = new Size(125, 39);
+            lblTotalGastos.Size = new Size(107, 47);
             lblTotalGastos.TabIndex = 24;
-            lblTotalGastos.Text = "Gasotssss";
+            lblTotalGastos.Text = "Gastos";
             // 
             // txtConceptoGasto
             // 
-            txtConceptoGasto.Location = new Point(216, 542);
+            txtConceptoGasto.Location = new Point(284, 733);
             txtConceptoGasto.Name = "txtConceptoGasto";
             txtConceptoGasto.Size = new Size(125, 27);
             txtConceptoGasto.TabIndex = 25;
             // 
             // txtMontoGasto
             // 
-            txtMontoGasto.Location = new Point(216, 575);
+            txtMontoGasto.Location = new Point(284, 796);
             txtMontoGasto.Name = "txtMontoGasto";
             txtMontoGasto.Size = new Size(125, 27);
             txtMontoGasto.TabIndex = 26;
@@ -231,11 +237,34 @@
             dgvVentasHoy.Size = new Size(477, 312);
             dgvVentasHoy.TabIndex = 27;
             // 
+            // guna2HtmlLabel4
+            // 
+            guna2HtmlLabel4.BackColor = Color.Transparent;
+            guna2HtmlLabel4.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            guna2HtmlLabel4.Location = new Point(87, 727);
+            guna2HtmlLabel4.Name = "guna2HtmlLabel4";
+            guna2HtmlLabel4.Size = new Size(191, 33);
+            guna2HtmlLabel4.TabIndex = 28;
+            guna2HtmlLabel4.Text = "Motivo del gasto:";
+            guna2HtmlLabel4.Click += guna2HtmlLabel4_Click;
+            // 
+            // guna2HtmlLabel5
+            // 
+            guna2HtmlLabel5.BackColor = Color.Transparent;
+            guna2HtmlLabel5.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            guna2HtmlLabel5.Location = new Point(105, 790);
+            guna2HtmlLabel5.Name = "guna2HtmlLabel5";
+            guna2HtmlLabel5.Size = new Size(173, 33);
+            guna2HtmlLabel5.TabIndex = 29;
+            guna2HtmlLabel5.Text = "Monto gastado:";
+            // 
             // FrmCashCut
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1902, 1033);
+            Controls.Add(guna2HtmlLabel5);
+            Controls.Add(guna2HtmlLabel4);
             Controls.Add(dgvVentasHoy);
             Controls.Add(btnIniciarCorte);
             Controls.Add(txtMontoGasto);
@@ -279,5 +308,7 @@
         private TextBox txtConceptoGasto;
         private TextBox txtMontoGasto;
         private DataGridView dgvVentasHoy;
+        private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel4;
+        private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel5;
     }
 }

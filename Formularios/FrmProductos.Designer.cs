@@ -165,7 +165,7 @@
             btnNew.ShadowDecoration.CustomizableEdges = customizableEdges5;
             btnNew.Size = new Size(280, 62);
             btnNew.TabIndex = 65;
-            btnNew.Text = "Nuevo";
+            btnNew.Text = "Limpiar";
             btnNew.TextOffset = new Point(-20, 0);
             btnNew.Click += btnNew_Click;
             // 
@@ -185,7 +185,7 @@
             btnDelete.ImageAlign = HorizontalAlignment.Right;
             btnDelete.ImageOffset = new Point(10, 0);
             btnDelete.ImageSize = new Size(50, 50);
-            btnDelete.Location = new Point(1027, 133);
+            btnDelete.Location = new Point(544, 133);
             btnDelete.Name = "btnDelete";
             btnDelete.ShadowDecoration.CustomizableEdges = customizableEdges7;
             btnDelete.Size = new Size(280, 62);
@@ -351,12 +351,12 @@
             btnVariacion.ImageAlign = HorizontalAlignment.Right;
             btnVariacion.ImageOffset = new Point(10, 0);
             btnVariacion.ImageSize = new Size(50, 50);
-            btnVariacion.Location = new Point(65, 518);
+            btnVariacion.Location = new Point(16, 133);
             btnVariacion.Name = "btnVariacion";
             btnVariacion.ShadowDecoration.CustomizableEdges = customizableEdges13;
-            btnVariacion.Size = new Size(280, 62);
+            btnVariacion.Size = new Size(496, 62);
             btnVariacion.TabIndex = 67;
-            btnVariacion.Text = "Agregar";
+            btnVariacion.Text = "Agregar variacion";
             btnVariacion.TextOffset = new Point(-20, 0);
             btnVariacion.Visible = false;
             btnVariacion.Click += btnVariacion_Click;
@@ -384,22 +384,25 @@
             // 
             // btnCargarImagen
             // 
+            btnCargarImagen.BackColor = Color.Lime;
             btnCargarImagen.Location = new Point(1492, 339);
+            btnCargarImagen.Margin = new Padding(0);
             btnCargarImagen.Name = "btnCargarImagen";
             btnCargarImagen.Size = new Size(117, 29);
             btnCargarImagen.TabIndex = 70;
             btnCargarImagen.Text = "Cargar imagen";
-            btnCargarImagen.UseVisualStyleBackColor = true;
+            btnCargarImagen.UseVisualStyleBackColor = false;
             btnCargarImagen.Click += btnCargarImagen_Click;
             // 
             // btnDeleteImage
             // 
-            btnDeleteImage.Location = new Point(1631, 223);
+            btnDeleteImage.BackColor = Color.Gold;
+            btnDeleteImage.Location = new Point(1492, 196);
             btnDeleteImage.Name = "btnDeleteImage";
             btnDeleteImage.Size = new Size(117, 29);
             btnDeleteImage.TabIndex = 71;
             btnDeleteImage.Text = "Quitar imagen";
-            btnDeleteImage.UseVisualStyleBackColor = true;
+            btnDeleteImage.UseVisualStyleBackColor = false;
             btnDeleteImage.Click += btnDeleteImage_Click;
             // 
             // FrmProductos
