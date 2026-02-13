@@ -80,12 +80,12 @@ select * from Gastos;
 select * from Productos;
 select * from Variaciones;
 
-drop table DetalleVenta;
-drop table Ventas;
-drop table Gastos;
-drop table CorteCaja;
-drop table Variaciones;
-drop table Productos;
+												drop table DetalleVenta;
+												drop table Ventas;
+												drop table Gastos;
+												drop table CorteCaja;
+												drop table Variaciones;
+												drop table Productos;
 
 
 -- 1. antes de iniciar el proyecto por primera vez se necesita borrar los datos de la base de datos local y de la nube
@@ -93,6 +93,7 @@ drop table Productos;
 /* 3. agregar desde el programa o desde la base de datos el primer producto el cual debe de ser el POLLO, siempre debe de tener el ID 1
        (si es desde el programa se agrega automaticamente en la bd en la nube, si no agregar en la nube manualmente) */
 -- 4. agregar las variaciones con el script de abajo en ambas bd
+-- 5. verificar que el precio del pollo y variaciones sea el mismo, actualmente solo se puede actualizar desde la bd
 
 insert into Variaciones (IdVariacion, IdProducto, NombreVariacion, Precio, Activo)
 values (1, 1, 'Natural', 180, 1),
@@ -105,6 +106,11 @@ insert into Variaciones (IdVariacion, IdProducto, NombreVariacion, Precio, Activ
 values (1, 1, 'Natural', 180, 1),
 (2, 1, 'Adobado', 180, 1),
 (3, 1, 'Chiltepin', 180, 1);
+
+UPDATE Variaciones
+SET Precio = 200
+WHERE IdVariacion = 1;
+
 
 
 
