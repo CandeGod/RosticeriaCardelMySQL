@@ -209,7 +209,7 @@ namespace RosticeriaCardelV2.Contenedores
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     connection.Open(); // Abre la conexión aquí dentro del bloque using
-                    string query = "SELECT * FROM CorteCaja";
+                    string query = "SELECT * FROM CorteCaja ORDER BY Fecha DESC";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         using (MySqlDataReader reader = command.ExecuteReader())

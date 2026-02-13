@@ -45,7 +45,7 @@ namespace RosticeriaCardelV2.Contenedores
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     connection.Open();
-                    string query = "SELECT * FROM Ventas ORDER BY IdVenta DESC";
+                    string query = "SELECT * FROM Ventas ORDER BY Fecha DESC";
                     MySqlCommand command = new MySqlCommand(query, connection);
                     MySqlDataAdapter da = new MySqlDataAdapter(command);
 
@@ -190,7 +190,7 @@ namespace RosticeriaCardelV2.Contenedores
         public DataTable GetSalesByMonth(int mes)
         {
             DataTable dtVentas = new DataTable();
-            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE MONTH(Fecha) = @Mes";
+            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE MONTH(Fecha) = @Mes ORDER BY Fecha DESC";
 
             using (MySqlConnection conn = _databaseConnection.GetConnection())
             {
@@ -210,7 +210,7 @@ namespace RosticeriaCardelV2.Contenedores
         public DataTable GetSalesBySpecificDate(DateTime fecha)
         {
             DataTable dtVentas = new DataTable();
-            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE DATE(Fecha) = @Fecha";
+            string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio FROM Ventas WHERE DATE(Fecha) = @Fecha ORDER BY Fecha DESC";
 
             using (MySqlConnection conn = _databaseConnection.GetConnection())
             {
@@ -237,7 +237,7 @@ namespace RosticeriaCardelV2.Contenedores
                 {
                     connection.Open();
                     string query = "SELECT IdVenta, Fecha, Total, MontoPagado, Cambio " +
-                        "FROM Ventas WHERE DATE(FECHA) = CURDATE();";
+                        "FROM Ventas WHERE DATE(FECHA) = CURDATE() ORDER BY Fecha DESC;";
 
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {

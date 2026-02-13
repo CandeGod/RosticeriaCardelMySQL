@@ -179,7 +179,7 @@ namespace RosticeriaCardelV2.Contenedores
                 using (MySqlConnection connection = _databaseConnection.GetConnection())
                 {
                     connection.Open();
-                    string query = "SELECT * FROM Gastos WHERE IdCorte = @IdCorte";
+                    string query = "SELECT * FROM Gastos WHERE IdCorte = @IdCorte ORDER BY Fecha DESC";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdCorte", idCorte);
