@@ -40,7 +40,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar los cortes de caja no sincronizados:" + ex.Message);
+                //MessageBox.Show("Error al cargar los cortes de caja no sincronizados:" + ex.Message);
             }
 
             return dt;
@@ -66,7 +66,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar los cortes de caja no sincronizados: " + ex.Message);
+                //MessageBox.Show("Error al cargar los cortes de caja no sincronizados: " + ex.Message);
             }
 
             return dt;
@@ -89,7 +89,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al marcar los cortes de caja como sincronizados: {ex.Message}");
+                //MessageBox.Show($"Error al marcar los cortes de caja como sincronizados: {ex.Message}");
             }
         }
 
@@ -164,7 +164,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al sincronizar los cortes de caja: {ex.Message}");
+                //MessageBox.Show($"Error al sincronizar los cortes de caja: {ex.Message}");
                 Console.WriteLine("Error al sincronizar los cortes de caja: " + ex.Message);
             }
         }

@@ -77,7 +77,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar los detalles de venta no sincronizados: {ex.Message}");
+                //MessageBox.Show($"Error al cargar los detalles de venta no sincronizados: {ex.Message}");
             }
 
             return dt;
@@ -100,7 +100,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al marcar detalles de venta como sincronizados: {ex.Message}");
+                //MessageBox.Show($"Error al marcar detalles de venta como sincronizados: {ex.Message}");
             }
         }
 
@@ -213,7 +213,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar detalles de la venta: {ex.Message}");
+                //MessageBox.Show($"Error al cargar detalles de la venta: {ex.Message}");
             }
 
             return dt;
@@ -257,7 +257,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar resumen de ventas: {ex.Message}");
+                //MessageBox.Show($"Error al cargar resumen de ventas: {ex.Message}");
             }
 
             return dt;
@@ -320,7 +320,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar resumen de ventas: {ex.Message}");
+                //MessageBox.Show($"Error al cargar resumen de ventas: {ex.Message}");
             }
 
             return dt;
@@ -365,7 +365,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar las ventas para la fecha seleccionada: {ex.Message}");
+                //MessageBox.Show($"Error al cargar las ventas para la fecha seleccionada: {ex.Message}");
             }
 
             return dt;
@@ -411,7 +411,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar resumen de ventas: {ex.Message}");
+                //MessageBox.Show($"Error al cargar resumen de ventas: {ex.Message}");
             }
 
             return dt;

@@ -41,7 +41,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar los gastos no sincronizados");
+                //MessageBox.Show("Error al cargar los gastos no sincronizados");
             }
 
             return dt;
@@ -65,7 +65,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al marcar los gastos como sincronizados: {ex.Message}");
+                //MessageBox.Show($"Error al marcar los gastos como sincronizados: {ex.Message}");
             }
         }
 
@@ -138,7 +138,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al sincronizar los gastos: {ex.Message}");
+                //MessageBox.Show($"Error al sincronizar los gastos: {ex.Message}");
                 Console.WriteLine("Error al sincronizar los gastos: " + ex.Message);
             }
         }

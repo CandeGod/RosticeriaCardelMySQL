@@ -54,7 +54,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar las ventas: {ex.Message}");
+               // MessageBox.Show($"Error al cargar las ventas: {ex.Message}");
             }
 
             return dt;
@@ -79,7 +79,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar las ventas no sincronizadas: {ex.Message}");
+               // MessageBox.Show($"Error al cargar las ventas no sincronizadas: {ex.Message}");
             }
 
             return dt;
@@ -102,7 +102,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al marcar ventas como sincronizadas: {ex.Message}");
+                //MessageBox.Show($"Error al marcar ventas como sincronizadas: {ex.Message}");
             }
         }
 

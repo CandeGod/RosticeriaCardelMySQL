@@ -36,7 +36,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Error al cargar los productos no sincronizados " + ex.Message);
+                //MessageBox.Show("Error al cargar los productos no sincronizados " + ex.Message);
             }
 
             return dt;
@@ -60,7 +60,7 @@ namespace RosticeriaCardelV2.Contenedores
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al marcar productos como sincronizadois: {ex.Message}");
+               // MessageBox.Show($"Error al marcar productos como sincronizadois: {ex.Message}");
             }
         }
 
